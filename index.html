@@ -42,6 +42,8 @@ body {
     border: 1px solid #7fff14;
     border-radius: 2px;
     background: linear-gradient(300deg, #ffa500 0%, #ffd200 55%, #ffa500 60%);
+    height: 40px;
+    width: 40px;
 }
 a {
     color: #18520c;
@@ -57,10 +59,12 @@ document.onscroll = function() {
         if (window.innerHeight + window.scrollY > document.body.clientHeight) {
             document.getElementById('bar').style.boxShadow='0px 6px 10px black';
             document.getElementById('bar').style.opacity='0.7';
+            document.getElementById('bar').style.backgroundColor='#7fff14FF';
             document.getElementById('topbutt').style.display="block";
         }else{
         document.getElementById('bar').style.boxShadow='0px 0px 0px black';
         document.getElementById('bar').style.opacity='1';
+        document.getElementById('bar').style.backgroundColor='#00000000';
         document.getElementById('topbutt').style.display="none";
         }
     }
