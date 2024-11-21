@@ -1,22 +1,53 @@
+:root {
+    --page-bg: lightgray;
+    --group-bg: white;
+    --bar-bg: white;
+    --shadow: darkgray;
+    --button-bg: lightgray;
+    --hr-color: gray;
+    --link-color: darkslategray;
+    --text-color: black;
+    --logo-filter: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --page-bg: rgb(15, 28, 48);
+        --group-bg: rgb(36, 60, 95);
+        --bar-bg: rgb(36, 60, 95);
+        --shadow: rgb(8, 15, 26);
+        --button-bg: rgb(8, 15, 26);
+        --hr-color: rgb(168, 188, 207);
+        --link-color: rgb(168, 188, 207);
+        --text-color: lightgrey;
+        --logo-filter: invert(0.9);
+    }
+}
+
 .group {
     margin: 10px;
     border: 0px solid;
-    box-shadow: 4pt 4pt darkgray;
-    background: white;
+    box-shadow: 4pt 4pt var(--shadow);
+    background: var(--group-bg);
     padding: 1px;
     padding-left: 10px;
     padding-right: 10px;
     font-size: 13px;
 }
 
+.logo {
+    filter: var(--logo-filter);
+}
+
 body, header, footer {
     font-family: monospace;
+    color: var(--text-color);
 }
 
 body {
     background-repeat: no-repeat;
     margin-top: 80pt;
-    background: lightgray;
+    background: var(--page-bg);
 }
 .bar {
     top: 0px;
@@ -26,8 +57,8 @@ body {
     top: 0px;
     right: 0px;
     left: 0px;
-    background-color: white;
-    box-shadow: 0pt 4pt white;
+    background-color: var(--bar-bg);
+    box-shadow: 0pt 4pt var(--bar-bg);
     display: flex;
     align-items: center;
     align-content: space-between;
@@ -44,16 +75,18 @@ body {
     position: absolute;
     display: none;
     border: 0px;
-    background-color: lightgray;
+    background-color: var(--button-bg);
     height: 30pt;
     width: 30pt;
     font-size: 24pt;
     right: 50pt;
+    color: var(--text-color);
+    font: monospace;
 }
 a {
-    color: darkslategray;
+    color: var(--link-color);
 }
 hr {
-    border: 2px solid gray;
+    border: 2px solid var(--hr-color);
     border-radius: 2px;
 }
