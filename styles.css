@@ -1,0 +1,59 @@
+.group {
+    margin: 10px;
+    border: 0px solid;
+    box-shadow: 4pt 4pt darkgray;
+    background: white;
+    padding: 1px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 13px;
+}
+
+body, header, footer {
+    font-family: monospace;
+}
+
+body {
+    background-repeat: no-repeat;
+    margin-top: 80pt;
+    background: lightgray;
+}
+.bar {
+    top: 0px;
+    width: 100%;
+    height: 40pt;
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    background-color: white;
+    box-shadow: 0pt 4pt white;
+    display: flex;
+    align-items: center;
+    align-content: space-between;
+    gap: 10pt;
+    padding: 10pt;
+}
+
+.bar.title {
+    top: 10pt;
+    display: inline;
+    line-height: 1pt;
+}
+#up_button {
+    position: absolute;
+    display: none;
+    border: 0px;
+    background-color: lightgray;
+    height: 30pt;
+    width: 30pt;
+    font-size: 24pt;
+    right: 50pt;
+}
+a {
+    color: darkslategray;
+}
+hr {
+    border: 2px solid gray;
+    border-radius: 2px;
+}
