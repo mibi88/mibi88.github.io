@@ -54,11 +54,6 @@ body {
     background: var(--page-bg);
 }
 
-html {
-    margin: 0px;
-    padding: 0px;
-}
-
 footer {
     position: absolute;
     width: 100%;
