@@ -8,6 +8,8 @@
     --link-color: darkslategray;
     --text-color: black;
     --logo-filter: none;
+    --footer-bg: gray;
+    --footer-text-color: white;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -21,6 +23,8 @@
         --link-color: rgb(168, 188, 207);
         --text-color: lightgrey;
         --logo-filter: invert(0.9);
+        --footer-bg: rgb(36, 60, 95);
+        --footer-text-color: lightgrey;
     }
 }
 
@@ -49,6 +53,27 @@ body {
     margin-top: 80pt;
     background: var(--page-bg);
 }
+
+html {
+    margin: 0px;
+    padding: 0px;
+}
+
+footer {
+    position: absolute;
+    width: 100%;
+    margin: 2em 0px 0px 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 2em;
+    padding-bottom: 2em;
+    text-align: center;
+    background: var(--footer-bg);
+    left: 0px;
+    right: 0px;
+    color: var(--footer-text-color);
+}
+
 .bar {
     top: 0px;
     width: 100%;
