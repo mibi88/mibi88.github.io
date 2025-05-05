@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta name="generator" content="LyX 2.4.2.1" />
+<title>Simple 3D rendering in Python</title>
+<style>
+/* Layout-provided Styles */
+h1.title {
+font-size: x-large;
+margin-bottom: 1ex;
+text-align: center;
+
+}
+div.author {
+font-size: large;
+margin-top: 1.3ex;
+margin-bottom: 0.7ex;
+text-align: center;
+
+}
+div.date {
+font-size: large;
+margin-top: 0.9ex;
+margin-bottom: 0.5ex;
+text-align: center;
+
+}
+div.standard {
+	margin-bottom: 2ex;
+}
+div.plain_layout {
+text-align: left;
+
+}
+h2.section_ {
+font-weight: bold;
+font-size: x-large;
+margin-top: 1.3ex;
+margin-bottom: 0.7ex;
+text-align: left;
+
+}
+dl.description dt { font-weight: bold; }
+span.flex_url {
+font-family: monospace;
+}
+
+
+</style>
+</head>
+<body dir="auto">
+<h1 class='title' id='magicparlabel-1'>Simple 3D rendering in Python</h1>
+<div class='author' id='magicparlabel-2'><span style='font-variant:small-caps;'>Mibi88</span></div>
+<div class='date' id='magicparlabel-3'>05/05/2025</div>
+<div class='standard' id='magicparlabel-4'>Recently I participated at a challenge, where in an evening we had 6 hours to make a game in Python 3 with Pyxel (it sucks). I really wanted to make some 3D because it&#8217;s more impressive than a simple pixel art 2D game and I saw that Pyxel has a function to render colored triangles. It also means that I can&#8217;t have any depth buffer (and I don&#8217;t know the formula for perspective correct interpolation so I would not have been able to do 3D rendering with a depth buffer anyway). I just sorted the triangles by depth (by calculating the average of the depth of the three points, maybe there is a better way to do it, but I don&#8217;t know any) with some selection sort (maybe insertion sort may have been better, or maybe it isn&#8217;t because it doesn&#8217;t always take the same time so maybe the framerate would have been less consistent). Some formulas are also required to render 3D (I didn&#8217;t used matrices because I haven&#8217;t seen them at school yet: I&#8217;m still very young, and the little I know about them, because I use matrices in MibiEngine2 would not have been enough). So I used some formulas I found on the web a long time ago (it isn&#8217;t online anymore but it got archived by the Wayback Machine: <span class='flex_url'>https://web.archive.org/web/20220625104937/https://www.mfitzp.com/creating-a-3d-rotating-cube-with-micropython-and-oled-display/</span>), but the formula for projection isn&#8217;t correct and I didn&#8217;t implemented one of the rotation formulas correctly: the rotation around the <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mi>y</mi>
+</math>
+ axis. I really hate AIs because they&#8217;re crawling forges so intensively and require a lot of energy, but ChatGPT was really helpful here to get the formulas I needed. I also found one of them on Wikipedia for projection. I&#8217;ll share the formulas here because I found them very hard to find, and I may not be the only one that finds them useful.</div>
+<h2 class='section_' id='magicparlabel-5'>Rotation</h2>
+<dl class='description'>
+<dt class="description_label">Around&#xA0;the&#xA0;<math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mi>x</mi>
+</math>
+&#xA0;axis</dt>
+<dd class="description_item" id='magicparlabel-6'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mrow>
+ <mi>y</mi>
+ <mo stretchy='false'>'</mo>
+ <mo stretchy='false'>=</mo>
+ <mi>y</mi>
+ <mo>&#x00D7;</mo>
+ <mo>cos</mo>
+ <mi>&#x3B8;</mi>
+ <mo stretchy='false'>-</mo>
+ <mi>z</mi>
+ <mo>&#x00D7;</mo>
+ <mo>sin</mo>
+ <mi>&#x3B8;</mi>
+</mrow>
+</math>
+ and <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mrow>
+ <mi>z</mi>
+ <mo stretchy='false'>'</mo>
+ <mo stretchy='false'>=</mo>
+ <mi>y</mi>
+ <mo>&#x00D7;</mo>
+ <mo>sin</mo>
+ <mi>&#x3B8;</mi>
+ <mo stretchy='false'>+</mo>
+ <mi>z</mi>
+ <mo>&#x00D7;</mo>
+ <mo>cos</mo>
+ <mi>&#x3B8;</mi>
+</mrow>
+</math>
+. <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mrow>
+ <mi>x</mi>
+ <mo stretchy='false'>'</mo>
+ <mo stretchy='false'>=</mo>
+ <mi>x</mi>
+</mrow>
+</math>
+ because we&#8217;re rotating around the <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mi>x</mi>
+</math>
+ axis</dd>
+<dt class="description_label">Around&#xA0;the&#xA0;<math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mi>y</mi>
+</math>
+&#xA0;axis</dt>
+<dd class="description_item" id='magicparlabel-7'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mrow>
+ <mi>z</mi>
+ <mo stretchy='false'>'</mo>
+ <mo stretchy='false'>=</mo>
+ <mi>z</mi>
+ <mo>&#x00D7;</mo>
+ <mo>cos</mo>
+ <mi>&#x3B8;</mi>
+ <mo stretchy='false'>-</mo>
+ <mi>x</mi>
+ <mo>&#x00D7;</mo>
+ <mo>sin</mo>
+ <mi>&#x3B8;</mi>
+</mrow>
+</math>
+ and <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mrow>
+ <mi>x</mi>
+ <mo stretchy='false'>'</mo>
+ <mo stretchy='false'>=</mo>
+ <mi>z</mi>
+ <mo>&#x00D7;</mo>
+ <mo>sin</mo>
+ <mi>&#x3B8;</mi>
+ <mo stretchy='false'>+</mo>
+ <mi>x</mi>
+ <mo>&#x00D7;</mo>
+ <mo>cos</mo>
+ <mi>&#x3B8;</mi>
+</mrow>
+</math>
+. <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mrow>
+ <mi>y</mi>
+ <mo stretchy='false'>'</mo>
+ <mo stretchy='false'>=</mo>
+ <mi>y</mi>
+</mrow>
+</math>
+ because we&#8217;re rotating around the <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mi>y</mi>
+</math>
+ axis</dd>
+<dt class="description_label">Around&#xA0;the&#xA0;<math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mi>z</mi>
+</math>
+&#xA0;axis</dt>
+<dd class="description_item" id='magicparlabel-8'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mrow>
+ <mi>x</mi>
+ <mo stretchy='false'>'</mo>
+ <mo stretchy='false'>=</mo>
+ <mi>x</mi>
+ <mo>&#x00D7;</mo>
+ <mo>cos</mo>
+ <mi>&#x3B8;</mi>
+ <mo stretchy='false'>-</mo>
+ <mi>y</mi>
+ <mo>&#x00D7;</mo>
+ <mo>sin</mo>
+ <mi>&#x3B8;</mi>
+</mrow>
+</math>
+ and <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mrow>
+ <mi>y</mi>
+ <mo stretchy='false'>'</mo>
+ <mo stretchy='false'>=</mo>
+ <mi>x</mi>
+ <mo>&#x00D7;</mo>
+ <mo>sin</mo>
+ <mi>&#x3B8;</mi>
+ <mo stretchy='false'>+</mo>
+ <mi>y</mi>
+ <mo>&#x00D7;</mo>
+ <mo>cos</mo>
+ <mi>&#x3B8;</mi>
+</mrow>
+</math>
+. <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mrow>
+ <mi>z</mi>
+ <mo stretchy='false'>'</mo>
+ <mo stretchy='false'>=</mo>
+ <mi>z</mi>
+</mrow>
+</math>
+ because we&#8217;re rotating around the <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mi>z</mi>
+</math>
+ axis</dd>
+</dl>
+<h2 class='section_' id='magicparlabel-9'>Projection</h2>
+<div class='standard' id='magicparlabel-10'>One of the big advantages of using a projection matrix is having a near and a far plane, but I only knew a very approximative formula without it... Today I fixed it. Here is the formula I&#8217;m using now:</div>
+
+<div class='standard' id='magicparlabel-11'>First I calculate the focal length, to use the formula from Wikipedia (<span class='flex_url'>https://en.wikipedia.org/wiki/3D_projection#Diagram</span>):</div>
+
+<div class='standard' id='magicparlabel-12'><math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mrow>
+ <mi>f</mi>
+ <mo stretchy='false'>=</mo>
+ <mfrac>
+  <mi>w</mi>
+  <mrow>
+   <mn>2</mn>
+   <mo>&#x00D7;</mo>
+   <mo>tan</mo>
+   <mi>&#x3B8;</mi>
+  </mrow>
+ </mfrac>
+</mrow>
+</math>
+ with <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mi>&#x3B8;</mi>
+</math>
+ being the field of view (FOV for short) and <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mi>w</mi>
+</math>
+ the width of the viewport.</div>
+
+<div class='standard' id='magicparlabel-13'><b>Note</b>: Pyxel doesn&#8217;t provide a <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mo>tan</mo>
+</math>
+ function so I just used <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mfrac>
+ <mrow>
+  <mo>sin</mo>
+  <mi>&#x3B8;</mi>
+ </mrow>
+ <mrow>
+  <mo>cos</mo>
+  <mi>&#x3B8;</mi>
+ </mrow>
+</mfrac>
+</math>
+.</div>
+
+<div class='standard' id='magicparlabel-14'>Then I applied Wikipedia&#8217;s formula to calculate the X and Y coordinates: <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mrow>
+ <mi>x</mi>
+ <mo stretchy='false'>'</mo>
+ <mo stretchy='false'>=</mo>
+ <mi>x</mi>
+ <mo>&#x00D7;</mo>
+ <mfrac>
+  <mi>f</mi>
+  <mi>z</mi>
+ </mfrac>
+</mrow>
+</math>
+ and <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mrow>
+ <mi>y</mi>
+ <mo stretchy='false'>'</mo>
+ <mo stretchy='false'>=</mo>
+ <mi>y</mi>
+ <mo>&#x00D7;</mo>
+ <mfrac>
+  <mi>f</mi>
+  <mi>z</mi>
+ </mfrac>
+</mrow>
+</math>
+.</div>
+
+<div class='standard' id='magicparlabel-15'><b>Note</b>: make sure that <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<mi>z</mi>
+</math>
+ is non-zero, or you will get a <span style='font-family:monospace;'>ZeroDivisionError</span>.</div>
+<h2 class='section_' id='magicparlabel-16'>Conclusion</h2>
+<div class='standard' id='magicparlabel-17'>All those formulas are all you should need to render very basic 3D.</div>
+
+<div class='standard' id='magicparlabel-18'>You can check the code of my little 3D demo here: <span class='flex_url'>https://github.com/mibi88/3d_pyxel/</span>.</div>
+
+<div class='standard' id='magicparlabel-19'>I hope it can help you on your journey making a very basic software renderer :).</div>
+</body>
+</html>
