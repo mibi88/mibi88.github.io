@@ -10,6 +10,7 @@
     --logo-filter: none;
     --footer-bg: gray;
     --footer-text-color: white;
+    --iframe-filter: none;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -25,6 +26,7 @@
         --logo-filter: invert(0.9);
         --footer-bg: rgb(36, 60, 95);
         --footer-text-color: lightgrey;
+        --iframe-filter: invert(0.9);
     }
 }
 
@@ -46,6 +48,7 @@
 body, header, footer {
     font-family: monospace;
     color: var(--text-color);
+    z-index: 1;
 }
 
 body {
@@ -117,5 +120,7 @@ iframe {
     padding: 0;
     margin: 0;
     overflow: hidden;
+    filter: var(--iframe-filter);
+    z-index: -1;
 }
 
