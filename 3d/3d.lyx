@@ -1,0 +1,404 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children no
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Simple 3D rendering in Python
+\end_layout
+
+\begin_layout Author
+
+\shape smallcaps
+Mibi88
+\end_layout
+
+\begin_layout Date
+05/05/2025
+\end_layout
+
+\begin_layout Standard
+Recently I participated at a challenge,
+ where in an evening we had 6 hours to make a game in Python 3 with Pyxel (it sucks).
+ I really wanted to make some 3D because it's more impressive than a simple pixel art 2D game and I saw that Pyxel has a function to render colored triangles.
+ It also means that I can't have any depth buffer (and I don't know the formula for perspective correct interpolation so I would not have been able to do 3D rendering with a depth buffer anyway).
+ I just sorted the triangles by depth (by calculating the average of the depth of the three points,
+ maybe there is a better way to do it,
+ but I don't know any) with some selection sort (maybe insertion sort may have been better,
+ or maybe it isn't because it doesn't always take the same time so maybe the framerate would have been less consistent).
+ Some formulas are also required to render 3D (I didn't used matrices because I haven't seen them at school yet:
+ I'm still very young,
+ and the little I know about them,
+ because I use matrices in MibiEngine2 would not have been enough).
+ So I used some formulas I found on the web a long time ago (it isn't online anymore but it got archived by the Wayback Machine:
+ 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://web.archive.org/web/20220625104937/https://www.mfitzp.com/creating-a-3d-rotating-cube-with-micropython-and-oled-display/
+\end_layout
+
+\end_inset
+
+),
+ but the formula for projection isn't correct and I didn't implemented one of the rotation formulas correctly:
+ the rotation around the 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\nospellcheck off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $y$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\nospellcheck default
+\bar default
+\strikeout default
+\xout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ axis.
+ I really hate AIs because they're crawling forges so intensively and require a lot of energy,
+ but ChatGPT was really helpful here to get the formulas I needed.
+ I also found one of them on Wikipedia for projection.
+ I'll share the formulas here because I found them very hard to find,
+ and I may not be the only one that finds them useful.
+\end_layout
+
+\begin_layout Section*
+Rotation
+\end_layout
+
+\begin_layout Description
+Around
+\begin_inset space ~
+\end_inset
+
+the
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $x$
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+axis 
+\begin_inset Formula $y'=y\times\cos\theta-z\times\sin\theta$
+\end_inset
+
+ and 
+\begin_inset Formula $z'=y\times\sin\theta+z\times\cos\theta$
+\end_inset
+
+.
+ 
+\begin_inset Formula $x'=x$
+\end_inset
+
+ because we're rotating around the 
+\begin_inset Formula $x$
+\end_inset
+
+ axis
+\end_layout
+
+\begin_layout Description
+Around
+\begin_inset space ~
+\end_inset
+
+the
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $y$
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+axis 
+\begin_inset Formula $z'=z\times\cos\theta-x\times\sin\theta$
+\end_inset
+
+ and 
+\begin_inset Formula $x'=z\times\sin\theta+x\times\cos\theta$
+\end_inset
+
+.
+ 
+\begin_inset Formula $y'=y$
+\end_inset
+
+ because we're rotating around the 
+\begin_inset Formula $y$
+\end_inset
+
+ axis
+\end_layout
+
+\begin_layout Description
+Around
+\begin_inset space ~
+\end_inset
+
+the
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $z$
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+axis 
+\begin_inset Formula $x'=x\times\cos\theta-y\times\sin\theta$
+\end_inset
+
+ and 
+\begin_inset Formula $y'=x\times\sin\theta+y\times\cos\theta$
+\end_inset
+
+.
+ 
+\begin_inset Formula $z'=z$
+\end_inset
+
+ because we're rotating around the 
+\begin_inset Formula $z$
+\end_inset
+
+ axis
+\end_layout
+
+\begin_layout Section*
+Projection
+\end_layout
+
+\begin_layout Standard
+One of the big advantages of using a projection matrix is having a near and a far plane,
+ but I only knew a very approximative formula without it...
+ Today I fixed it.
+ Here is the formula I'm using now:
+\end_layout
+
+\begin_layout Standard
+First I calculate the focal length,
+ to use the formula from Wikipedia (
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://en.wikipedia.org/wiki/3D_projection#Diagram
+\end_layout
+
+\end_inset
+
+):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $f=\frac{w}{2\times\tan\theta}$
+\end_inset
+
+ with 
+\begin_inset Formula $\theta$
+\end_inset
+
+ being the field of view (FOV for short) and 
+\begin_inset Formula $w$
+\end_inset
+
+ the width of the viewport.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Note
+\series default
+:
+ Pyxel doesn't provide a 
+\begin_inset Formula $\tan$
+\end_inset
+
+ function so I just used 
+\begin_inset Formula $\frac{\sin\theta}{\cos\theta}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Then I applied Wikipedia's formula to calculate the X and Y coordinates:
+ 
+\begin_inset Formula $x'=x\times\frac{f}{z}$
+\end_inset
+
+ and 
+\begin_inset Formula $y'=y\times\frac{f}{z}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Note
+\series default
+:
+ make sure that 
+\begin_inset Formula $z$
+\end_inset
+
+ is non-zero,
+ or you will get a 
+\family typewriter
+ZeroDivisionError
+\family default
+.
+\end_layout
+
+\begin_layout Section*
+Conclusion
+\end_layout
+
+\begin_layout Standard
+All those formulas are all you should need to render very basic 3D.
+\end_layout
+
+\begin_layout Standard
+You can check the code of my little 3D demo here:
+ 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://github.com/mibi88/3d_pyxel/
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+I hope it can help you on your journey making a very basic software renderer :).
+\end_layout
+
+\end_body
+\end_document
