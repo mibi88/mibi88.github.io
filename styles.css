@@ -55,6 +55,7 @@ body {
     background-repeat: no-repeat;
     margin-top: 80pt;
     background: var(--page-bg);
+    hyphens: auto;
 }
 
 footer {
@@ -111,5 +112,9 @@ a {
 hr {
     border: 2px solid var(--hr-color);
     border-radius: 2px;
+}
+
+math {
+    font-family: monospace;
 }
 

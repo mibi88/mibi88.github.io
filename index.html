@@ -1,28 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf8"/>
         <title>Mibi's Website</title>
         <link href="icon.png" rel="icon" type="image/png">
         <link rel="stylesheet" type="text/css" href="styles.css">
-        <script type = "text/javascript" src="index.js" defer></script>
-        <script type = "text/javascript">
-            function loadArticle(element) {
-                var xmlhttp = new XMLHttpRequest();
-                xmlhttp.onreadystatechange = () => {
-                    if(xmlhttp.status == 200){
-                        element.innerHTML = xmlhttp.responseText;
-                    }else if(xmlhttp.readyState == 4){
-                        var url = element.textContent.trim();
-                        element.innerHTML = "<b>Failed to load article</b> " +
-                                            "\"<a href=\"" + url + "\">" +
-                                            url + "</a>\"!";
-                    }
-                };
-                xmlhttp.open("GET", element.textContent, true);
-                xmlhttp.send();
-            }
-        </script>
+        <script type = "text/javascript" src="index.js"></script>
     </head>
     <header class="bar" id="bar">
         <img class = "logo" width = 60px height = 60px src = "icon.png"/>
@@ -31,7 +14,7 @@
             ^
         </button>
     </header>
-    <body>
+    <body onload="loadAllArticles();">
         <noscript>
             <div class = "group">
                 <h1>JavaScript needed!</h1>
@@ -41,7 +24,9 @@
         </noscript>
         <div class = "group">
             <h1>Articles</h1>
-            <a href="#3d-python">Simple 3D rendering in Python</a>
+            <div id="article-list">
+                <i>List not loaded yet…</i>
+            </div>
         </div>
         <div class = "group">
             <h1>Welcome to my web page!</h1>
@@ -204,12 +189,6 @@
                 articles/3d/3d.xhtml
             </div>
         </div>
-        <script type="text/javascript" defer>
-            var articles = document.getElementsByClassName("article");
-            for(var i=0;i<articles.length;i++){
-                loadArticle(articles[i]);
-            }
-        </script>
     </body>
     <footer>
         (C) 2024 Mibi88
