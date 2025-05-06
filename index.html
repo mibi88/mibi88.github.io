@@ -7,19 +7,20 @@
         <link rel="stylesheet" type="text/css" href="styles.css">
         <script type = "text/javascript" src="index.js" defer></script>
         <script type = "text/javascript">
-            function iframeAdapt(iframe) {
-                iframe.height = iframe.contentWindow.document.documentElement
-                                      .scrollHeight+'px';
-            }
-            function addStyles(iframe) {
-                var style = document.createElement("style");
-                style.textContent = `
-                html {
-                    font-family: monospace;
-                    font-size: 12pt;
-                }
-                `;
-                iframe.contentDocument.head.appendChild(style);
+            function loadArticle(element) {
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = () => {
+                    if(xmlhttp.status == 200){
+                        element.innerHTML = xmlhttp.responseText;
+                    }else if(xmlhttp.readyState == 4){
+                        var url = element.textContent.trim();
+                        element.innerHTML = "<b>Failed to load article</b> " +
+                                            "\"<a href=\"" + url + "\">" +
+                                            url + "</a>\"!";
+                    }
+                };
+                xmlhttp.open("GET", element.textContent, true);
+                xmlhttp.send();
             }
         </script>
     </head>
@@ -31,6 +32,13 @@
         </button>
     </header>
     <body>
+        <noscript>
+            <div class = "group">
+                <h1>JavaScript needed!</h1>
+                <b>JavaScript is required to load articles.</b> Links to the
+                articles will still be visible.
+            </div>
+        </noscript>
         <div class = "group">
             <h1>Articles</h1>
             <a href="#3d-python">Simple 3D rendering in Python</a>
@@ -192,11 +200,16 @@
         </div>
         <div class = "group">
             <h1>Articles</h1>
-            <div id="3d-python">
-                <iframe src="articles/3d/3d.xhtml" scrolling="no"
-                        onload="iframeAdapt(this); addStyles(this);"></iframe>
+            <div id="3d-python" class="article">
+                articles/3d/3d.xhtml
             </div>
         </div>
+        <script type="text/javascript" defer>
+            var articles = document.getElementsByClassName("article");
+            for(var i=0;i<articles.length;i++){
+                loadArticle(articles[i]);
+            }
+        </script>
     </body>
     <footer>
         (C) 2024 Mibi88
