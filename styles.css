@@ -104,7 +104,6 @@ footer {
     font-size: 24pt;
     right: 50pt;
     color: var(--text-color);
-    font: monospace;
 }
 a {
     color: var(--link-color);
@@ -119,7 +118,6 @@ iframe {
     width: 100%;
     padding: 0;
     margin: 0;
-    overflow: hidden;
     filter: var(--iframe-filter);
     z-index: -1;
 }
