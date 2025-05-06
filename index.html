@@ -6,6 +6,22 @@
         <link href="icon.png" rel="icon" type="image/png">
         <link rel="stylesheet" type="text/css" href="styles.css">
         <script type = "text/javascript" src="index.js" defer></script>
+        <script type = "text/javascript">
+            function iframeAdapt(iframe) {
+                iframe.height = iframe.contentWindow.document.documentElement
+                                      .scrollHeight+'px';
+            }
+            function addStyles(iframe) {
+                var style = document.createElement("style");
+                style.textContent = `
+                html {
+                    font-family: monospace;
+                    font-size: 12pt;
+                }
+                `;
+                iframe.contentDocument.head.appendChild(style);
+            }
+        </script>
     </head>
     <header class="bar" id="bar">
         <img class = "logo" width = 60px height = 60px src = "icon.png"/>
@@ -15,6 +31,10 @@
         </button>
     </header>
     <body>
+        <div class = "group">
+            <h1>Articles</h1>
+            <a href="#3d-python">Simple 3D rendering in Python</a>
+        </div>
         <div class = "group">
             <h1>Welcome to my web page!</h1>
             <p>
@@ -172,12 +192,9 @@
         </div>
         <div class = "group">
             <h1>Articles</h1>
-            <div>
-                <iframe src="3d/3d.xhtml"
-                        onload="this.height = this.contentWindow.document
-                                              .documentElement
-                                              .scrollHeight+'px';">
-                </iframe>
+            <div id="3d-python">
+                <iframe src="articles/3d/3d.xhtml" scroll="no"
+                        onload="iframeAdapt(this); addStyles(this);"></iframe>
             </div>
         </div>
     </body>
