@@ -38,7 +38,6 @@
     padding: 1px;
     padding-left: 10px;
     padding-right: 10px;
-    font-size: 13px;
 }
 
 .logo {
@@ -49,6 +48,7 @@ body, header, footer {
     font-family: monospace;
     color: var(--text-color);
     z-index: 1;
+    font-size: 12pt;
 }
 
 body {
