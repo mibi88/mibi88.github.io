@@ -310,7 +310,7 @@ https://en.wikipedia.org/wiki/3D_projection#Diagram
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula $f=\frac{w}{2\times\tan\theta}$
+\begin_inset Formula $f=\frac{w}{2\times\tan\frac{\theta}{2}}$
 \end_inset
 
  with 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
 <head>
-<meta name="generator" content="LyX 2.4.2.1" />
+<meta name="generator" content="LyX 2.4.3" />
 <title>Simple 3D rendering in Python</title>
 <style>
 /* Layout-provided Styles */
@@ -56,13 +56,13 @@ font-family: monospace;
 <mi>y</mi>
 </math>
  axis. I really hate AIs because they&#8217;re crawling forges so intensively and require a lot of energy, but ChatGPT was really helpful here to get the formulas I needed. I also found one of them on Wikipedia for projection. I&#8217;ll share the formulas here because I found them very hard to find, and I may not be the only one that finds them useful.</div>
-<h2 class='section_' id='magicparlabel-5'>Rotation</h2>
+<h2 class='section_' id='magicparlabel-9'>Rotation</h2>
 <dl class='description'>
 <dt class="description_label">Around&#xA0;the&#xA0;<math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mi>x</mi>
 </math>
 &#xA0;axis</dt>
-<dd class="description_item" id='magicparlabel-6'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<dd class="description_item" id='magicparlabel-10'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mrow>
  <mi>y</mi>
  <mo stretchy='false'>'</mo>
@@ -110,7 +110,7 @@ font-family: monospace;
 <mi>y</mi>
 </math>
 &#xA0;axis</dt>
-<dd class="description_item" id='magicparlabel-7'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<dd class="description_item" id='magicparlabel-11'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mrow>
  <mi>z</mi>
  <mo stretchy='false'>'</mo>
@@ -158,7 +158,7 @@ font-family: monospace;
 <mi>z</mi>
 </math>
 &#xA0;axis</dt>
-<dd class="description_item" id='magicparlabel-8'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<dd class="description_item" id='magicparlabel-12'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mrow>
  <mi>x</mi>
  <mo stretchy='false'>'</mo>
@@ -203,12 +203,12 @@ font-family: monospace;
 </math>
  axis</dd>
 </dl>
-<h2 class='section_' id='magicparlabel-9'>Projection</h2>
-<div class='standard' id='magicparlabel-10'>One of the big advantages of using a projection matrix is having a near and a far plane, but I only knew a very approximative formula without it... Today I fixed it. Here is the formula I&#8217;m using now:</div>
+<h2 class='section_' id='magicparlabel-13'>Projection</h2>
+<div class='standard' id='magicparlabel-14'>One of the big advantages of using a projection matrix is having a near and a far plane, but I only knew a very approximative formula without it... Today I fixed it. Here is the formula I&#8217;m using now:</div>
 
-<div class='standard' id='magicparlabel-11'>First I calculate the focal length, to use the formula from Wikipedia (<span class='flex_url'>https://en.wikipedia.org/wiki/3D_projection#Diagram</span>):</div>
+<div class='standard' id='magicparlabel-15'>First I calculate the focal length, to use the formula from Wikipedia (<span class='flex_url'>https://en.wikipedia.org/wiki/3D_projection#Diagram</span>):</div>
 
-<div class='standard' id='magicparlabel-12'><math xmlns='http://www.w3.org/1998/Math/MathML'>
+<div class='standard' id='magicparlabel-20'><math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mrow>
  <mi>f</mi>
  <mo stretchy='false'>=</mo>
@@ -218,7 +218,10 @@ font-family: monospace;
    <mn>2</mn>
    <mo>&#x00D7;</mo>
    <mo>tan</mo>
-   <mi>&#x3B8;</mi>
+   <mfrac>
+    <mi>&#x3B8;</mi>
+    <mn>2</mn>
+   </mfrac>
   </mrow>
  </mfrac>
 </mrow>
@@ -231,7 +234,7 @@ font-family: monospace;
 </math>
  the width of the viewport.</div>
 
-<div class='standard' id='magicparlabel-13'><b>Note</b>: Pyxel doesn&#8217;t provide a <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<div class='standard' id='magicparlabel-21'><b>Note</b>: Pyxel doesn&#8217;t provide a <math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mo>tan</mo>
 </math>
  function so I just used <math xmlns='http://www.w3.org/1998/Math/MathML'>
@@ -248,7 +251,7 @@ font-family: monospace;
 </math>
 .</div>
 
-<div class='standard' id='magicparlabel-14'>Then I applied Wikipedia&#8217;s formula to calculate the X and Y coordinates: <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<div class='standard' id='magicparlabel-22'>Then I applied Wikipedia&#8217;s formula to calculate the X and Y coordinates: <math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mrow>
  <mi>x</mi>
  <mo stretchy='false'>'</mo>
@@ -276,15 +279,15 @@ font-family: monospace;
 </math>
 .</div>
 
-<div class='standard' id='magicparlabel-15'><b>Note</b>: make sure that <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<div class='standard' id='magicparlabel-23'><b>Note</b>: make sure that <math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mi>z</mi>
 </math>
  is non-zero, or you will get a <span style='font-family:monospace;'>ZeroDivisionError</span>.</div>
-<h2 class='section_' id='magicparlabel-16'>Conclusion</h2>
-<div class='standard' id='magicparlabel-17'>All those formulas are all you should need to render very basic 3D.</div>
+<h2 class='section_' id='magicparlabel-24'>Conclusion</h2>
+<div class='standard' id='magicparlabel-25'>All those formulas are all you should need to render very basic 3D.</div>
 
-<div class='standard' id='magicparlabel-18'>You can check the code of my little 3D demo here: <span class='flex_url'>https://github.com/mibi88/3d_pyxel/</span>.</div>
+<div class='standard' id='magicparlabel-26'>You can check the code of my little 3D demo here: <span class='flex_url'>https://github.com/mibi88/3d_pyxel/</span>.</div>
 
-<div class='standard' id='magicparlabel-19'>I hope it can help you on your journey making a very basic software renderer :).</div>
+<div class='standard' id='magicparlabel-31'>I hope it can help you on your journey making a very basic software renderer :).</div>
 </body>
 </html>
