@@ -1,0 +1,484 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children no
+\language american
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Trying to port Micropython to Mega 2560 clones
+\end_layout
+
+\begin_layout Author
+
+\shape smallcaps
+Mibi88
+\end_layout
+
+\begin_layout Date
+03/10/2025
+\end_layout
+
+\begin_layout Standard
+I just quickly wrote this article,
+ so it is quite messy,
+ and my English is not so good,
+ so\SpecialChar ldots
+ sorry for that.
+\end_layout
+
+\begin_layout Standard
+I had finished all the exercises very quickly in NSI class,
+ so the teacher asked us,
+ who had finished early,
+ if we wanted to try getting micropython working on mega 2560 clones.
+ I searched on the internet,
+ and found that there was no port,
+ and that it had really low specs.
+ Later,
+ when at home I decided making a port of micropython to it,
+ as I knew it was easy from contributing to PythonExtra and it might be fun.
+ I quickly set up a fedora VM to install all the AVR tools in (I don't want to pollute my PC which such a useless toolchain as I have no such boards myself).
+ I cloned the master branch and copy-pasted all the sample code at 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://docs.micropython.org/en/latest/develop/porting.html
+\end_layout
+
+\end_inset
+
+.
+ It compiled and I was able to run the build/firmware.elf file in a terminal.
+ Now I needed to get it to build for the microcontroller.
+ I added
+\end_layout
+
+\begin_layout Verbatim
+CROSS_COMPILE ?= avr-
+\end_layout
+
+\begin_layout Standard
+to the makefile and started fixing errors.
+ I had to change
+\end_layout
+
+\begin_layout Verbatim
+typedef intptr_t mp_int_t;
+ // must be pointer size
+\end_layout
+
+\begin_layout Verbatim
+typedef uintptr_t mp_uint_t;
+ // must be pointer size
+\end_layout
+
+\begin_layout Standard
+to
+\end_layout
+
+\begin_layout Verbatim
+typedef long long mp_int_t;
+ // must be pointer size
+\end_layout
+
+\begin_layout Verbatim
+typedef unsigned long long mp_uint_t;
+ // must be pointer size
+\end_layout
+
+\begin_layout Standard
+in mpconfigport.h,
+ because of a 
+\family typewriter
+MP_STATIC_ASSERT
+\family default
+ that checks if 
+\family typewriter
+sizeof(mp_int_t) == sizeof(long long)
+\family default
+,
+ I don't understand why,
+ this is incoherent with what the doc says by saying that 
+\family typewriter
+mp_int_t
+\family default
+ 
+\begin_inset Quotes eld
+\end_inset
+
+must be pointer size
+\begin_inset Quotes erd
+\end_inset
+
+,
+ but whatever\SpecialChar ldots
+
+\end_layout
+
+\begin_layout Standard
+Next I had to fix some issues with the libc and libm,
+ as they lack some functions for some reason.
+ It was quickly solved with some hacks.
+\end_layout
+
+\begin_layout Standard
+Here are the messy things I had to do in mpconfigport.h
+\end_layout
+
+\begin_layout Verbatim
+// HACK:
+ Awful hacks with the types
+\end_layout
+
+\begin_layout Verbatim
+typedef long long mp_int_t;
+ // must be pointer size
+\end_layout
+
+\begin_layout Verbatim
+typedef unsigned long long mp_uint_t;
+ // must be pointer size
+\end_layout
+
+\begin_layout Verbatim
+
+\end_layout
+
+\begin_layout Verbatim
+typedef long mp_off_t;
+\end_layout
+
+\begin_layout Verbatim
+typedef long ssize_t;
+\end_layout
+
+\begin_layout Verbatim
+
+\end_layout
+
+\begin_layout Verbatim
+// HACK:
+ Really awful hack to get things compiling
+\end_layout
+
+\begin_layout Verbatim
+#include <math.h>
+\end_layout
+
+\begin_layout Verbatim
+#undef nanf
+\end_layout
+
+\begin_layout Verbatim
+float __nanf(const char *tagp);
+\end_layout
+
+\begin_layout Verbatim
+#define nanf __nanf
+\end_layout
+
+\begin_layout Verbatim
+float __nearbyintf(float n);
+\end_layout
+
+\begin_layout Verbatim
+#define nearbyintf __nearbyintf
+\end_layout
+
+\begin_layout Verbatim
+
+\end_layout
+
+\begin_layout Verbatim
+// HACK:
+ More awful hacks to get things compiling!
+\end_layout
+
+\begin_layout Verbatim
+#define SEEK_SET 0
+\end_layout
+
+\begin_layout Verbatim
+#define SEEK_CUR 1
+\end_layout
+
+\begin_layout Verbatim
+#define SEK_END  2
+\end_layout
+
+\begin_layout Verbatim
+
+\end_layout
+
+\begin_layout Verbatim
+#define STDIN_FILENO    0
+\end_layout
+
+\begin_layout Verbatim
+#define STDOUT_FILENO   1
+\end_layout
+
+\begin_layout Verbatim
+#define STDERR_FILENO   2
+\end_layout
+
+\begin_layout Verbatim
+
+\end_layout
+
+\begin_layout Verbatim
+// NOTE:
+ Actually IIRC those FE_* defines are useless
+\end_layout
+
+\begin_layout Verbatim
+#define FE_DOWNWARD     1
+\end_layout
+
+\begin_layout Verbatim
+#define FE_TONEAREST    2
+\end_layout
+
+\begin_layout Verbatim
+#define FE_TOWARDZERO   3
+\end_layout
+
+\begin_layout Verbatim
+#define FE_UPWARD       4
+\end_layout
+
+\begin_layout Standard
+And here are my messy implementations of 
+\family typewriter
+__nanf
+\family default
+ and 
+\family typewriter
+__nearbyintf
+\family default
+ that I've just thrown in mphalport.c
+\end_layout
+
+\begin_layout Verbatim
+float __nanf(const char *tagp) {
+\end_layout
+
+\begin_layout Verbatim
+    return 0;
+\end_layout
+
+\begin_layout Verbatim
+}
+\end_layout
+
+\begin_layout Verbatim
+
+\end_layout
+
+\begin_layout Verbatim
+float __nearbyintf(float n) {
+\end_layout
+
+\begin_layout Verbatim
+    return roundf(n);
+ // It seems like mpy only uses it for rounding
+\end_layout
+
+\begin_layout Verbatim
+}
+\end_layout
+
+\begin_layout Standard
+I then added the following define to mpconfigport.h
+\end_layout
+
+\begin_layout Verbatim
+#define MICROPY_GCREGS_SETJMP (1)
+\end_layout
+
+\begin_layout Standard
+By the way at some point I also found 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://micropythpn.readthedocs.io/en/docs-chap1/develop/porting.html
+\end_layout
+
+\end_inset
+
+ at some point which was very helpful,
+ because it listed a lot of flags.
+ If I'm not mistaken at this point all the C code was compiling,
+ but not linking yet:
+ the 
+\family typewriter
+.text
+\family default
+ section was overflowing.
+ I had commented 
+\family typewriter
+CROSS_COMPILE ?= avr-
+\family default
+ in the Makefile and it compiled and worked on Linux,
+ so at least my quick and dirty hacks worked.
+\end_layout
+
+\begin_layout Standard
+So I enabled LTO with 
+\family typewriter
+-flto=auto
+\family default
+ and added 
+\family typewriter
+-mmcu=atmega2560
+\family default
+ to use the correct linker script.
+ The 
+\family typewriter
+.text
+\family default
+ section was still too full.
+\end_layout
+
+\begin_layout Standard
+I then had to stop coding,
+ and continue the next day:
+ today.
+\end_layout
+
+\begin_layout Standard
+I had some time this morning,
+ so I tried the fix I had in mind:
+ just adding 
+\family typewriter
+-Oz
+\family default
+ to the 
+\family typewriter
+CFLAGS
+\family default
+.
+ And it worked!
+ \SpecialChar ldots
+but I was now facing another issue:
+ 
+\family typewriter
+.data
+\family default
+ and 
+\family typewriter
+.bss
+\family default
+ were full.
+ So I tried disabling more and more features,
+ removing all the useless platform-dependant things micropython links by default for some reason,
+ writing the 
+\family typewriter
+OBJ
+\family default
+ list by hand,
+ only including what's needed,
+ but I didn't got any of it working.
+\end_layout
+
+\begin_layout Standard
+So I just give up,
+ I don't want to spend more time on this.
+\end_layout
+
+\begin_layout Standard
+I hope all what I've written down in this article may help someone in the future,
+ who also tries to port it to this board.
+ If you want the code of my port attempt,
+ please contact me.
+ I won't publish it publicly as it is a mess and I've done a lot of copy-paste from various places.
+\end_layout
+
+\end_body
+\end_document

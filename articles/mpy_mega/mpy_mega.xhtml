@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta name="generator" content="LyX 2.4.4" />
+<title>Trying to port Micropython to Mega 2560 clones</title>
+<style>
+/* Layout-provided Styles */
+h1.title {
+font-size: x-large;
+margin-bottom: 1ex;
+text-align: center;
+
+}
+div.author {
+font-size: large;
+margin-top: 1.3ex;
+margin-bottom: 0.7ex;
+text-align: center;
+
+}
+div.date {
+font-size: large;
+margin-top: 0.9ex;
+margin-bottom: 0.5ex;
+text-align: center;
+
+}
+div.standard {
+	margin-bottom: 2ex;
+}
+div.plain_layout {
+text-align: left;
+
+}
+pre.verbatim {
+font-family: monospace;
+margin-top: 0.7ex;
+margin-bottom: 0.7ex;
+text-align: left;
+
+}
+span.flex_url {
+font-family: monospace;
+}
+
+
+</style>
+</head>
+<body dir="auto">
+<h1 class='title' id='magicparlabel-1'>Trying to port Micropython to Mega 2560 clones</h1>
+<div class='author' id='magicparlabel-2'><span style='font-variant:small-caps;'>Mibi88</span></div>
+<div class='date' id='magicparlabel-3'>03/10/2025</div>
+<div class='standard' id='magicparlabel-4'>I just quickly wrote this article, so it is quite messy, and my English is not so good, so&#x2026; sorry for that.</div>
+
+<div class='standard' id='magicparlabel-5'>I had finished all the exercises very quickly in NSI class, so the teacher asked us, who had finished early, if we wanted to try getting micropython working on mega 2560 clones. I searched on the internet, and found that there was no port, and that it had really low specs. Later, when at home I decided making a port of micropython to it, as I knew it was easy from contributing to PythonExtra and it might be fun. I quickly set up a fedora VM to install all the AVR tools in (I don&#8217;t want to pollute my PC which such a useless toolchain as I have no such boards myself). I cloned the master branch and copy-pasted all the sample code at <span class='flex_url'>https://docs.micropython.org/en/latest/develop/porting.html</span>. It compiled and I was able to run the build/firmware.elf file in a terminal. Now I needed to get it to build for the microcontroller. I added</div>
+<pre class='verbatim'>
+CROSS_COMPILE&#160;?=&#160;avr-
+</pre>
+<div class='standard' id='magicparlabel-11'>to the makefile and started fixing errors. I had to change</div>
+<pre class='verbatim'>
+typedef&#160;intptr_t&#160;mp_int_t;&#160;//&#160;must&#160;be&#160;pointer&#160;size
+typedef&#160;uintptr_t&#160;mp_uint_t;&#160;//&#160;must&#160;be&#160;pointer&#160;size
+</pre>
+<div class='standard' id='magicparlabel-14'>to</div>
+<pre class='verbatim'>
+typedef&#160;long&#160;long&#160;mp_int_t;&#160;//&#160;must&#160;be&#160;pointer&#160;size
+typedef&#160;unsigned&#160;long&#160;long&#160;mp_uint_t;&#160;//&#160;must&#160;be&#160;pointer&#160;size
+</pre>
+<div class='standard' id='magicparlabel-17'>in mpconfigport.h, because of a <span style='font-family:monospace;'>MP_STATIC_ASSERT</span> that checks if <span style='font-family:monospace;'>sizeof(mp_int_t) == sizeof(long long)</span>, I don&#8217;t understand why, this is incoherent with what the doc says by saying that <span style='font-family:monospace;'>mp_int_t</span> &#8220;must be pointer size&#8221;, but whatever&#x2026;</div>
+
+<div class='standard' id='magicparlabel-18'>Next I had to fix some issues with the libc and libm, as they lack some functions for some reason. It was quickly solved with some hacks.</div>
+
+<div class='standard' id='magicparlabel-19'>Here are the messy things I had to do in mpconfigport.h</div>
+<pre class='verbatim'>
+//&#160;HACK:&#160;Awful&#160;hacks&#160;with&#160;the&#160;types
+typedef&#160;long&#160;long&#160;mp_int_t;&#160;//&#160;must&#160;be&#160;pointer&#160;size
+typedef&#160;unsigned&#160;long&#160;long&#160;mp_uint_t;&#160;//&#160;must&#160;be&#160;pointer&#160;size
+
+typedef&#160;long&#160;mp_off_t;
+typedef&#160;long&#160;ssize_t;
+
+//&#160;HACK:&#160;Really&#160;awful&#160;hack&#160;to&#160;get&#160;things&#160;compiling
+#include&#160;&lt;math.h&gt;
+#undef&#160;nanf
+float&#160;__nanf(const&#160;char&#160;*tagp);
+#define&#160;nanf&#160;__nanf
+float&#160;__nearbyintf(float&#160;n);
+#define&#160;nearbyintf&#160;__nearbyintf
+
+//&#160;HACK:&#160;More&#160;awful&#160;hacks&#160;to&#160;get&#160;things&#160;compiling!
+#define&#160;SEEK_SET&#160;0
+#define&#160;SEEK_CUR&#160;1
+#define&#160;SEK_END&#160;&#160;2
+
+#define&#160;STDIN_FILENO&#160;&#160;&#160;&#160;0
+#define&#160;STDOUT_FILENO&#160;&#160;&#160;1
+#define&#160;STDERR_FILENO&#160;&#160;&#160;2
+
+//&#160;NOTE:&#160;Actually&#160;IIRC&#160;those&#160;FE_*&#160;defines&#160;are&#160;useless
+#define&#160;FE_DOWNWARD&#160;&#160;&#160;&#160;&#160;1
+#define&#160;FE_TONEAREST&#160;&#160;&#160;&#160;2
+#define&#160;FE_TOWARDZERO&#160;&#160;&#160;3
+#define&#160;FE_UPWARD&#160;&#160;&#160;&#160;&#160;&#160;&#160;4
+</pre>
+<div class='standard' id='magicparlabel-49'>And here are my messy implementations of <span style='font-family:monospace;'>__nanf</span> and <span style='font-family:monospace;'>__nearbyintf</span> that I&#8217;ve just thrown in mphalport.c</div>
+<pre class='verbatim'>
+float&#160;__nanf(const&#160;char&#160;*tagp)&#160;{
+&#160;&#160;&#160;&#160;return&#160;0;
+}
+
+float&#160;__nearbyintf(float&#160;n)&#160;{
+&#160;&#160;&#160;&#160;return&#160;roundf(n);&#160;//&#160;It&#160;seems&#160;like&#160;mpy&#160;only&#160;uses&#160;it&#160;for&#160;rounding
+}
+</pre>
+<div class='standard' id='magicparlabel-57'>I then added the following define to mpconfigport.h</div>
+<pre class='verbatim'>
+#define&#160;MICROPY_GCREGS_SETJMP&#160;(1)
+</pre>
+<div class='standard' id='magicparlabel-59'>By the way at some point I also found <span class='flex_url'>https://micropythpn.readthedocs.io/en/docs-chap1/develop/porting.html</span> at some point which was very helpful, because it listed a lot of flags. If I&#8217;m not mistaken at this point all the C code was compiling, but not linking yet: the <span style='font-family:monospace;'>.text</span> section was overflowing. I had commented <span style='font-family:monospace;'>CROSS_COMPILE ?= avr-</span> in the Makefile and it compiled and worked on Linux, so at least my quick and dirty hacks worked.</div>
+
+<div class='standard' id='magicparlabel-64'>So I enabled LTO with <span style='font-family:monospace;'>-flto=auto</span> and added <span style='font-family:monospace;'>-mmcu=atmega2560</span> to use the correct linker script. The <span style='font-family:monospace;'>.text</span> section was still too full.</div>
+
+<div class='standard' id='magicparlabel-65'>I then had to stop coding, and continue the next day: today.</div>
+
+<div class='standard' id='magicparlabel-66'>I had some time this morning, so I tried the fix I had in mind: just adding <span style='font-family:monospace;'>-Oz</span> to the <span style='font-family:monospace;'>CFLAGS</span>. And it worked! &#x2026;but I was now facing another issue: <span style='font-family:monospace;'>.data</span> and <span style='font-family:monospace;'>.bss</span> were full. So I tried disabling more and more features, removing all the useless platform-dependant things micropython links by default for some reason, writing the <span style='font-family:monospace;'>OBJ</span> list by hand, only including what&#8217;s needed, but I didn&#8217;t got any of it working.</div>
+
+<div class='standard' id='magicparlabel-67'>So I just give up, I don&#8217;t want to spend more time on this.</div>
+
+<div class='standard' id='magicparlabel-68'>I hope all what I&#8217;ve written down in this article may help someone in the future, who also tries to port it to this board. If you want the code of my port attempt, please contact me. I won&#8217;t publish it publicly as it is a mess and I&#8217;ve done a lot of copy-paste from various places.</div>
+</body>
+</html>

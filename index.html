@@ -47,6 +47,19 @@
         <div class = "group">
             <h1>Games</h1>
             <p>
+                bootris A small 510 bytes (+2 byte magic number to make it
+                bootable) clone of the famous video game with falling
+                tetrominos written in 16bit real mode x86 assembly (unfinished,
+                having some trouble to fit more code in it).
+            </p>
+            <p>
+                <a
+                 href="https://github.com/mibi88/mushroom_champ/">
+                 mushroom_champ</a>
+                A small game for the NES where one farms giant mushrooms
+                (unfinished).
+            </p>
+            <p>
                 <a href="https://github.com/mibi88/ld57">GOLD HUNGER (Ludum
                 Dare 57 jam)</a> A small game made with
                 <a
@@ -57,8 +70,8 @@
             </p>
             <p>
                 Tangris A game for the NES similar to the well known game with
-                falling tetrominos, but with tangrams :D, written in assembly
-                (not finished yet).
+                falling tetrominos, but with tangram pieces :D, written in
+                assembly (not finished yet).
             </p>
             <p>
                 Lifeless A small puzzling platformer for the NES (not finished
@@ -118,14 +131,46 @@
             <h1>Tools</h1>
             <p>
                 <a
+                 href="https://github.com/mibi88/PhosphorEngine/">
+                 PhosphorEngine</a>
+                A small text adventure engine for the web powered by a very
+                small RISC-V VM written in JavaScript.</br>
+                I made it originally for the js13k 2025 jam, but didn't
+                finish it in time.
+            </p>
+            <p>
+                <a
+                 href="https://github.com/mibi88/MibiEngineN/">
+                 MibiEngineN</a>
+                A small engine (more a template) for the NES using the NROM
+                mapper (unfinished).
+            </p>
+            <p>
+                <a
+                 href="https://github.com/mibi88/MibiNES/">
+                 MibiNES</a>
+                A small cycle-accurate NES emulator.
+            </p>
+            <p>
+                <a
+                 href="https://github.com/mibi88/nes_opcode_tester/">
+                 nes_opcode_tester</a>
+                A small utility to test the behavior of opcodes on the NES. It
+                currently only supports testing immediate addressing mode
+                opcodes.
+            </p>
+            <p>
+                <a
+                 href="https://github.com/mibi88/zipgit/">zipgit</a>
+                Some shell scripts to create a git repository from ZIP
+                archives.
+            </p>
+            <p>
+                <a
                  href="https://github.com/mibi88/MibiEngine2/">MibiEngine2</a>
                 My new game engine (if it can even be called a game engine)
                 that uses OpenGL ES (but will be able to support other
                 rendering APIs) and has very few dependencies.
-            </p>
-            <p>
-                <a href="https://github.com/mibi88/Mibitype/">Mibitype</a> A
-                font loading and rendering library (in a very early state).
             </p>
             <p>
                 <a href="https://github.com/mibi88/HexSpy">HexSpy</a> A native
@@ -147,10 +192,6 @@
                 to BBCode converter (unfinished).
             </p>
             <p>
-                <a href="https://git.planet-casio.com/mibi88/tinytiled">
-                tinytiled</a> A small library to load tiled maps in python.
-            </p>
-            <p>
                 <a href="https://github.com/mibi88/MibiNESTools">
                 MibiNESTools</a> An IDE to make NES games.
             </p>
@@ -161,6 +202,24 @@
             <p>
                 <a href="https://github.com/mibi88/MibiMdEditor">
                 MibiMdEditor</a> A Markdown editor using GTK4 written in Vala.
+            </p>
+        </div>
+        <div class = "group">
+            <h1>Libraries</h1>
+            <p>
+                <a href="https://github.com/mibi88/liburt">liburt</a> A small
+                highly portable drop-in replacement for libgcc or compiler-rt
+                (unfinished).</br>
+                I started making it for PhosphorEngine, because I didn't
+                managed to get libgcc compiled for RV32I.
+            </p>
+            <p>
+                <a href="https://github.com/mibi88/Mibitype/">Mibitype</a> A
+                font loading and rendering library (in a very early state).
+            </p>
+            <p>
+                <a href="https://git.planet-casio.com/mibi88/tinytiled">
+                tinytiled</a> A small library to load tiled maps in python.
             </p>
         </div>
         <div class = "group">
@@ -221,12 +280,15 @@
         </div>
         <div class = "group">
             <h1>Articles</h1>
+            <div id="mpy-mega2560" class="article">
+                articles/mpy_mega/mpy_mega.xhtml
+            </div>
             <div id="3d-python" class="article">
                 articles/3d/3d.xhtml
             </div>
         </div>
     </body>
     <footer>
-        (C) 2024 Mibi88
+        (C) 2024-2025 Mibi88
     </footer>
 </html>
