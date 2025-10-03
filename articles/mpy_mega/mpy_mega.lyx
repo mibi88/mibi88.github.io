@@ -112,7 +112,7 @@ I just quickly wrote this article,
 I had finished all the exercises very quickly in NSI class,
  so the teacher asked us,
  who had finished early,
- if we wanted to try getting micropython working on mega 2560 clones.
+ if we could try getting micropython working on mega 2560 clones to help him.
  I searched on the internet,
  and found that there was no port,
  and that it had really low specs.
