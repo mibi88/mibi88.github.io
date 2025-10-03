@@ -117,7 +117,7 @@ I had finished all the exercises very quickly in NSI class,
  and found that there was no port,
  and that it had really low specs.
  Later,
- when at home I decided making a port of micropython to it,
+ when at home I was curious if I could make a port of micropython to it,
  as I knew it was easy from contributing to PythonExtra and it might be fun.
  I quickly set up a fedora VM to install all the AVR tools in (I don't want to pollute my PC which such a useless toolchain as I have no such boards myself).
  I cloned the master branch and copy-pasted all the sample code at 
