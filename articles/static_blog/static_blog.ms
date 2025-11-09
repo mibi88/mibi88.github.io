@@ -3,7 +3,7 @@
 .NHR
 
 .TL
-Making my website static
+Making my website statically generated
 
 .AU
 Mibi88
