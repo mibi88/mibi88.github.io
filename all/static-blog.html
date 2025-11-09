@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf8"/>
+        <title>Mibi&rsquo;s Website &mdash; Making my website static</title>
+        <link href="../icon.png" rel="icon" type="image/png">
+        <link rel="stylesheet" type="text/css" href="../styles.css">
+        <script type = "text/javascript" src="../index.js"></script>
+    </head>
+    <header class="bar" id="bar">
+        <a href="../index.html" style="all: inherit">
+            <img class = "logo" width=60px height=60px src="../icon.png"/>
+            <h1 id="title">Mibi&rsquo;s Website</h1>
+        </a>
+        <button onclick="topFunction();" id="up_button" title="Go to top">
+            ^
+        </button>
+    </header>
+    <body>
+        <div class="group">
+            <h1>Article &mdash; Making my website static</h1>
+            <div id="article-list">
+                
+<div class="article">
+
+<h1 align="center">Making my website static</h1>
+
+
+
+
+<p align="center" style="margin-top: 1em"><i>Mibi88</i></p>
+
+
+<p align="center" style="margin-top: 1em"><i>08/11/2025</i></p>
+
+<p style="margin-top: 1em">GitHub Pages imposes a big
+restriction on how pages can behave as they need to be
+static, which can be quite inconvenient. To make my website
+easier to modify I was using some JS to load the articles in
+the main page. However, it was therefore limiting it to
+browsers supporting&nbsp;/&nbsp;with JS enabled, and it
+isn&rsquo;t very scalable, as when there will be more and
+more articles, the website will have more and more articles
+to fetch and display. it was also quite annoying to write
+new articles or just update the project list as I had to
+write HTML, and I have an obsession of wrapping my code on
+80 columns :D (actually 79) which doesn&rsquo;t work very
+well when writing HTML.</p>
+
+<p style="margin-top: 1em">That&rsquo;s why I wanted to
+generate my website statically with a script. I wanted to
+write an article about how I struggled trying to fix my
+computer&rsquo;s cable management, but I decided to fix my
+website first. Originally I wanted to use python and
+something else like markdown, but finally I used bash, sed
+and groff (it&rsquo;s a bit cooler :D). I&rsquo;m also
+calling LyX to convert the older articles. My script is
+still a bit messy, but it works nicely. It loads the lists
+of articles and &lsquo;&lsquo;projects&rsquo;&rsquo; (the
+sections where all my projects are listed by category, e.g.,
+&lsquo;&lsquo;Games&rsquo;&rsquo; or
+&lsquo;&lsquo;Libraries&rsquo;&rsquo;, I don&rsquo;t really
+know how to call them), where the paths and the IDs (for
+articles) or the titles (for
+&lsquo;&lsquo;projects&rsquo;&rsquo;) are separated by
+semicolons. The most recent articles are listed first. My
+script then walks through these lists and generates the HTML
+code with the appropriate tool. Then I use sed a bunch to
+remove all the superfluous HTML that would make the
+generated HTML invalid (when viewing the source code via
+Firefox, it seems to be unhappy with the header and footer,
+but that&rsquo;s because my template HTML code itself is
+incorrect &mdash; I&rsquo;m not writing HTML very often
+&mdash; and I didn&rsquo;t know that &lt;header&gt; and
+&lt;footer&gt; must be inside &lt;body&gt;). Then I use sed
+again to replace {&lt;name&gt;} tags with the appropriate
+generated HTML, such as {article_list} which gets replaced
+with a list of links to all the articles. I should run sed
+over the articles and &lsquo;&lsquo;projects&rsquo;&rsquo;
+as well to replace curly braces with an escape sequence to
+avoid such tags to get replaced in the articles&rsquo;
+content, but I&rsquo;ll fix that later. I&rsquo;m also
+generating PDFs of the articles because I can (lol), but I
+don&rsquo;t include them in the git repo. I&rsquo;ve already
+an idea of a little Easter egg that I could add with a
+little bit of JS, but I&rsquo;ll do it later.</p>
+
+<p style="margin-top: 1em">So that&rsquo;s how I statically
+generate my website without using a premade solution. In the
+end it took me way longer than I expected, but it was quite
+fun! roff is fascinating, maybe I&rsquo;ll code my own
+implementation of it at some point...</p></div>
+            </div>
+        </div>
+    </body>
+    <footer>
+        (C) 2024&ndash;2025 Mibi88
+    </footer>
+</html>

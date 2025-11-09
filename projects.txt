@@ -1,0 +1,6 @@
+My youtube channel;projects/youtube.ms
+Games;projects/games.ms
+Tools;projects/tools.ms
+Libraries;projects/libraries.ms
+CASIO calculator stuff;projects/casio.ms
+Random stuff;projects/random.ms
