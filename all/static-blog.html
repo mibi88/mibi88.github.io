@@ -56,34 +56,33 @@ something else like markdown, but finally I used bash, sed
 and groff (it&rsquo;s a bit cooler :D). I&rsquo;m also
 calling LyX to convert the older articles. My script is
 still a bit messy, but it works nicely. It loads the lists
-of articles and &lsquo;&lsquo;projects&rsquo;&rsquo; (the
-sections where all my projects are listed by category, e.g.,
-&lsquo;&lsquo;Games&rsquo;&rsquo; or
-&lsquo;&lsquo;Libraries&rsquo;&rsquo;, I don&rsquo;t really
-know how to call them), where the paths and the IDs (for
-articles) or the titles (for
-&lsquo;&lsquo;projects&rsquo;&rsquo;) are separated by
-semicolons. The most recent articles are listed first. My
-script then walks through these lists and generates the HTML
-code with the appropriate tool. Then I use sed a bunch to
-remove all the superfluous HTML that would make the
-generated HTML invalid (when viewing the source code via
-Firefox, it seems to be unhappy with the header and footer,
-but that&rsquo;s because my template HTML code itself is
-incorrect &mdash; I&rsquo;m not writing HTML very often
-&mdash; and I didn&rsquo;t know that &lt;header&gt; and
-&lt;footer&gt; must be inside &lt;body&gt;). Then I use sed
-again to replace {&lt;name&gt;} tags with the appropriate
-generated HTML, such as {article_list} which gets replaced
-with a list of links to all the articles. I should run sed
-over the articles and &lsquo;&lsquo;projects&rsquo;&rsquo;
-as well to replace curly braces with an escape sequence to
-avoid such tags to get replaced in the articles&rsquo;
-content, but I&rsquo;ll fix that later. I&rsquo;m also
-generating PDFs of the articles because I can (lol), but I
-don&rsquo;t include them in the git repo. I&rsquo;ve already
-an idea of a little Easter egg that I could add with a
-little bit of JS, but I&rsquo;ll do it later.</p>
+of articles and &ldquo;projects&rdquo; (the sections where
+all my projects are listed by category, e.g.,
+&ldquo;Games&rdquo; or &ldquo;Libraries&rdquo;, I
+don&rsquo;t really know how to call them), where the paths
+and the IDs (for articles) or the titles (for
+&ldquo;projects&rdquo;) are separated by semicolons. The
+most recent articles are listed first. My script then walks
+through these lists and generates the HTML code with the
+appropriate tool. Then I use sed a bunch to remove all the
+superfluous HTML that would make the generated HTML invalid
+(when viewing the source code via Firefox, it seems to be
+unhappy with the header and footer, but that&rsquo;s because
+my template HTML code itself is incorrect &mdash; I&rsquo;m
+not writing HTML very often &mdash; and I didn&rsquo;t know
+that &lt;header&gt; and &lt;footer&gt; must be inside
+&lt;body&gt;). Then I use sed again to replace
+{&lt;name&gt;} tags with the appropriate generated HTML,
+such as {article_list} which gets replaced with a list of
+links to all the articles. I should run sed over the
+articles and &ldquo;projects&rdquo; as well to replace curly
+braces with an escape sequence to avoid such tags to get
+replaced in the articles&rsquo; content, but I&rsquo;ll fix
+that later. I&rsquo;m also generating PDFs of the articles
+because I can (lol), but I don&rsquo;t include them in the
+git repo. I&rsquo;ve already an idea of a little Easter egg
+that I could add with a little bit of JS, but I&rsquo;ll do
+it later.</p>
 
 <p style="margin-top: 1em">So that&rsquo;s how I statically
 generate my website without using a premade solution. In the

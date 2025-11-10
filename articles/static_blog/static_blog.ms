@@ -33,12 +33,12 @@ and
 .CW groff
 (it's a bit cooler :D). I'm also calling LyX to convert the older articles. My 
 script is still a bit messy, but it works nicely. It loads the lists of 
-articles and ``projects'' (the sections where all my projects are listed by 
-category, e.g., ``Games'' or ``Libraries'', I don't really know how to call 
-them), where the paths and the IDs (for articles) or the titles (for 
-``projects'') are separated by semicolons. The most recent articles are listed 
-first. My script then walks through these lists and generates the HTML code 
-with the appropriate tool. Then I use
+articles and \(lqprojects\(rq (the sections where all my projects are listed by 
+category, e.g., \(lqGames\(rq or \(lqLibraries\(rq, I don't really know how to 
+call them), where the paths and the IDs (for articles) or the titles (for 
+\(lqprojects\(rq) are separated by semicolons. The most recent articles are 
+listed first. My script then walks through these lists and generates the HTML 
+code with the appropriate tool. Then I use
 .CW sed
 a bunch to remove all the superfluous HTML that would make the generated HTML 
 invalid (when viewing the source code via Firefox, it seems to be unhappy with 
@@ -57,7 +57,7 @@ tags with the appropriate generated HTML, such as
 .CW {article_list}
 which gets replaced with a list of links to all the articles. I should run
 .CW sed
-over the articles and ``projects'' as well to replace curly braces with an 
+over the articles and \(lqprojects\(rq as well to replace curly braces with an 
 escape sequence to avoid such tags to get replaced in the articles' content, 
 but I'll fix that later. I'm also generating PDFs of the articles because I can 
 (lol), but I don't include them in the git repo. I've already an idea of a 
@@ -69,4 +69,5 @@ So that's how I statically generate my website without using a premade
 solution. In the end it took me way longer than I expected, but it was quite
 fun!
 .CW roff
-is fascinating, maybe I'll code my own implementation of it at some point...
+is fascinating, maybe I'll code my own implementation of it at some
+point.\|.\|.
