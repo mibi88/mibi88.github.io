@@ -70,4 +70,4 @@ solution. In the end it took me way longer than I expected, but it was quite
 fun!
 .CW roff
 is fascinating, maybe I'll code my own implementation of it at some
-point.\|.\|.
+point.\|.\|.\|.
