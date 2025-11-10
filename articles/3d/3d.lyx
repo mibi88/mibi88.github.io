@@ -86,6 +86,22 @@
 
 \begin_body
 
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+sloppy
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Title
 Simple 3D rendering in Python
 \end_layout
@@ -97,7 +113,7 @@ Mibi88
 \end_layout
 
 \begin_layout Date
-05/05/2025
+05/05/2025 - Updated on the 10/11/2025
 \end_layout
 
 \begin_layout Standard
@@ -115,16 +131,30 @@ Recently I participated at a challenge,
  because I use matrices in MibiEngine2 would not have been enough).
  So I used some formulas I found on the web a long time ago (it isn't online anymore but it got archived by the Wayback Machine:
  
-\begin_inset Flex URL
-status open
-
-\begin_layout Plain Layout
-
-https://web.archive.org/web/20220625104937/https://www.mfitzp.com/creating-a-3d-rotating-cube-with-micropython-and-oled-display/
-\end_layout
+\begin_inset CommandInset href
+LatexCommand href
+name "https://web.archive.org/web/20220625104937/https://www.mfitzp.com/creating-a-3d-rotating-cube-with-micropython-and-oled-display/"
+target "https://web.archive.org/web/20220625104937/https://www.mfitzp.com/creating-a-3d-rotating-cube-with-micropython-and-oled-display/"
+literal "false"
 
 \end_inset
 
+
+\shape italic
+ EDIT:
+ Actually it is still online,
+ the URL has just changed:
+ 
+\begin_inset CommandInset href
+LatexCommand href
+name "https://www.martinfitzpatrick.dev/creating-a-3d-rotating-cube-with-micropython-and-oled-display/"
+target "https://www.martinfitzpatrick.dev/creating-a-3d-rotating-cube-with-micropython-and-oled-display/"
+literal "false"
+
+\end_inset
+
+
+\shape default
 ),
  but the formula for projection isn't correct and I didn't implemented one of the rotation formulas correctly:
  the rotation around the 
@@ -288,7 +318,7 @@ Projection
 
 \begin_layout Standard
 One of the big advantages of using a projection matrix is having a near and a far plane,
- but I only knew a very approximative formula without it...
+ but I only knew a very approximate formula without it\SpecialChar ldots
  Today I fixed it.
  Here is the formula I'm using now:
 \end_layout
@@ -296,13 +326,11 @@ One of the big advantages of using a projection matrix is having a near and a fa
 \begin_layout Standard
 First I calculate the focal length,
  to use the formula from Wikipedia (
-\begin_inset Flex URL
-status open
-
-\begin_layout Plain Layout
-
-https://en.wikipedia.org/wiki/3D_projection#Diagram
-\end_layout
+\begin_inset CommandInset href
+LatexCommand href
+name "https://en.wikipedia.org/wiki/3D_projection#Diagram"
+target "https://en.wikipedia.org/wiki/3D_projection#Diagram"
+literal "false"
 
 \end_inset
 
@@ -383,13 +411,11 @@ All those formulas are all you should need to render very basic 3D.
 \begin_layout Standard
 You can check the code of my little 3D demo here:
  
-\begin_inset Flex URL
-status open
-
-\begin_layout Plain Layout
-
-https://github.com/mibi88/3d_pyxel/
-\end_layout
+\begin_inset CommandInset href
+LatexCommand href
+name "https://github.com/mibi88/3d_pyxel/"
+target "https://github.com/mibi88/3d_pyxel/"
+literal "false"
 
 \end_inset
 
@@ -398,6 +424,19 @@ https://github.com/mibi88/3d_pyxel/
 
 \begin_layout Standard
 I hope it can help you on your journey making a very basic software renderer :).
+\end_layout
+
+\begin_layout Section*
+
+\shape italic
+Edits from the 10/11/2025
+\end_layout
+
+\begin_layout Standard
+
+\shape italic
+Fixed an orthography error,
+ changed URLs to hyperlinks and added a link to the article's new location.
 \end_layout
 
 \end_body

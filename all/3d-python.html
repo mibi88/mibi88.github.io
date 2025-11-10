@@ -23,6 +23,9 @@
                 
 <div class="article"><style>
 /* Layout-provided Styles */
+div.standard {
+	margin-bottom: 2ex;
+}
 h1.title {
 font-size: x-large;
 margin-bottom: 1ex;
@@ -43,13 +46,6 @@ margin-bottom: 0.5ex;
 text-align: center;
 
 }
-div.standard {
-	margin-bottom: 2ex;
-}
-div.plain_layout {
-text-align: left;
-
-}
 h2.section_ {
 font-weight: bold;
 font-size: x-large;
@@ -59,26 +55,24 @@ text-align: left;
 
 }
 dl.description dt { font-weight: bold; }
-span.flex_url {
-font-family: monospace;
-}
 
 
 </style>
-<h1 class='title' id='magicparlabel-1'>Simple 3D rendering in Python</h1>
-<div class='author' id='magicparlabel-2'><span style='font-variant:small-caps;'>Mibi88</span></div>
-<div class='date' id='magicparlabel-3'>05/05/2025</div>
-<div class='standard' id='magicparlabel-4'>Recently I participated at a challenge, where in an evening we had 6 hours to make a game in Python 3 with Pyxel (it sucks). I really wanted to make some 3D because it&#8217;s more impressive than a simple pixel art 2D game and I saw that Pyxel has a function to render colored triangles. It also means that I can&#8217;t have any depth buffer (and I don&#8217;t know the formula for perspective correct interpolation so I would not have been able to do 3D rendering with a depth buffer anyway). I just sorted the triangles by depth (by calculating the average of the depth of the three points, maybe there is a better way to do it, but I don&#8217;t know any) with some selection sort (maybe insertion sort may have been better, or maybe it isn&#8217;t because it doesn&#8217;t always take the same time so maybe the framerate would have been less consistent). Some formulas are also required to render 3D (I didn&#8217;t used matrices because I haven&#8217;t seen them at school yet: I&#8217;m still very young, and the little I know about them, because I use matrices in MibiEngine2 would not have been enough). So I used some formulas I found on the web a long time ago (it isn&#8217;t online anymore but it got archived by the Wayback Machine: <span class='flex_url'>https://web.archive.org/web/20220625104937/https://www.mfitzp.com/creating-a-3d-rotating-cube-with-micropython-and-oled-display/</span>), but the formula for projection isn&#8217;t correct and I didn&#8217;t implemented one of the rotation formulas correctly: the rotation around the <math xmlns='http://www.w3.org/1998/Math/MathML'>
+
+<h1 class='title' id='magicparlabel-6'>Simple 3D rendering in Python</h1>
+<div class='author' id='magicparlabel-7'><span style='font-variant:small-caps;'>Mibi88</span></div>
+<div class='date' id='magicparlabel-8'>05/05/2025 - Updated on the 10/11/2025</div>
+<div class='standard' id='magicparlabel-9'>Recently I participated at a challenge, where in an evening we had 6 hours to make a game in Python 3 with Pyxel (it sucks). I really wanted to make some 3D because it&#8217;s more impressive than a simple pixel art 2D game and I saw that Pyxel has a function to render colored triangles. It also means that I can&#8217;t have any depth buffer (and I don&#8217;t know the formula for perspective correct interpolation so I would not have been able to do 3D rendering with a depth buffer anyway). I just sorted the triangles by depth (by calculating the average of the depth of the three points, maybe there is a better way to do it, but I don&#8217;t know any) with some selection sort (maybe insertion sort may have been better, or maybe it isn&#8217;t because it doesn&#8217;t always take the same time so maybe the framerate would have been less consistent). Some formulas are also required to render 3D (I didn&#8217;t used matrices because I haven&#8217;t seen them at school yet: I&#8217;m still very young, and the little I know about them, because I use matrices in MibiEngine2 would not have been enough). So I used some formulas I found on the web a long time ago (it isn&#8217;t online anymore but it got archived by the Wayback Machine: <a href="https://web.archive.org/web/20220625104937/https://www.mfitzp.com/creating-a-3d-rotating-cube-with-micropython-and-oled-display/">https://web.archive.org/web/20220625104937/https://www.mfitzp.com/creating-a-3d-rotating-cube-with-micropython-and-oled-display/</a><i> EDIT: Actually it is still online, the URL has just changed: <a href="https://www.martinfitzpatrick.dev/creating-a-3d-rotating-cube-with-micropython-and-oled-display/">https://www.martinfitzpatrick.dev/creating-a-3d-rotating-cube-with-micropython-and-oled-display/</a></i>), but the formula for projection isn&#8217;t correct and I didn&#8217;t implemented one of the rotation formulas correctly: the rotation around the <math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mi>y</mi>
 </math>
  axis. I really hate AIs because they&#8217;re crawling forges so intensively and require a lot of energy, but ChatGPT was really helpful here to get the formulas I needed. I also found one of them on Wikipedia for projection. I&#8217;ll share the formulas here because I found them very hard to find, and I may not be the only one that finds them useful.</div>
-<h2 class='section_' id='magicparlabel-9'>Rotation</h2>
+<h2 class='section_' id='magicparlabel-10'>Rotation</h2>
 <dl class='description'>
 <dt class="description_label">Around&#xA0;the&#xA0;<math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mi>x</mi>
 </math>
 &#xA0;axis</dt>
-<dd class="description_item" id='magicparlabel-10'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<dd class="description_item" id='magicparlabel-11'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mrow>
  <mi>y</mi>
  <mo stretchy='false'>'</mo>
@@ -126,7 +120,7 @@ font-family: monospace;
 <mi>y</mi>
 </math>
 &#xA0;axis</dt>
-<dd class="description_item" id='magicparlabel-11'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<dd class="description_item" id='magicparlabel-12'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mrow>
  <mi>z</mi>
  <mo stretchy='false'>'</mo>
@@ -174,7 +168,7 @@ font-family: monospace;
 <mi>z</mi>
 </math>
 &#xA0;axis</dt>
-<dd class="description_item" id='magicparlabel-12'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<dd class="description_item" id='magicparlabel-13'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mrow>
  <mi>x</mi>
  <mo stretchy='false'>'</mo>
@@ -219,12 +213,12 @@ font-family: monospace;
 </math>
  axis</dd>
 </dl>
-<h2 class='section_' id='magicparlabel-13'>Projection</h2>
-<div class='standard' id='magicparlabel-14'>One of the big advantages of using a projection matrix is having a near and a far plane, but I only knew a very approximative formula without it... Today I fixed it. Here is the formula I&#8217;m using now:</div>
+<h2 class='section_' id='magicparlabel-14'>Projection</h2>
+<div class='standard' id='magicparlabel-15'>One of the big advantages of using a projection matrix is having a near and a far plane, but I only knew a very approximate formula without it&#x2026; Today I fixed it. Here is the formula I&#8217;m using now:</div>
 
-<div class='standard' id='magicparlabel-15'>First I calculate the focal length, to use the formula from Wikipedia (<span class='flex_url'>https://en.wikipedia.org/wiki/3D_projection#Diagram</span>):</div>
+<div class='standard' id='magicparlabel-16'>First I calculate the focal length, to use the formula from Wikipedia (<a href="https://en.wikipedia.org/wiki/3D_projection#Diagram">https://en.wikipedia.org/wiki/3D_projection#Diagram</a>):</div>
 
-<div class='standard' id='magicparlabel-20'><math xmlns='http://www.w3.org/1998/Math/MathML'>
+<div class='standard' id='magicparlabel-17'><math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mrow>
  <mi>f</mi>
  <mo stretchy='false'>=</mo>
@@ -250,7 +244,7 @@ font-family: monospace;
 </math>
  the width of the viewport.</div>
 
-<div class='standard' id='magicparlabel-21'><b>Note</b>: Pyxel doesn&#8217;t provide a <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<div class='standard' id='magicparlabel-18'><b>Note</b>: Pyxel doesn&#8217;t provide a <math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mo>tan</mo>
 </math>
  function so I just used <math xmlns='http://www.w3.org/1998/Math/MathML'>
@@ -267,7 +261,7 @@ font-family: monospace;
 </math>
 .</div>
 
-<div class='standard' id='magicparlabel-22'>Then I applied Wikipedia&#8217;s formula to calculate the X and Y coordinates: <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<div class='standard' id='magicparlabel-19'>Then I applied Wikipedia&#8217;s formula to calculate the X and Y coordinates: <math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mrow>
  <mi>x</mi>
  <mo stretchy='false'>'</mo>
@@ -295,16 +289,18 @@ font-family: monospace;
 </math>
 .</div>
 
-<div class='standard' id='magicparlabel-23'><b>Note</b>: make sure that <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<div class='standard' id='magicparlabel-20'><b>Note</b>: make sure that <math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mi>z</mi>
 </math>
  is non-zero, or you will get a <span style='font-family:monospace;'>ZeroDivisionError</span>.</div>
-<h2 class='section_' id='magicparlabel-24'>Conclusion</h2>
-<div class='standard' id='magicparlabel-25'>All those formulas are all you should need to render very basic 3D.</div>
+<h2 class='section_' id='magicparlabel-21'>Conclusion</h2>
+<div class='standard' id='magicparlabel-22'>All those formulas are all you should need to render very basic 3D.</div>
 
-<div class='standard' id='magicparlabel-26'>You can check the code of my little 3D demo here: <span class='flex_url'>https://github.com/mibi88/3d_pyxel/</span>.</div>
+<div class='standard' id='magicparlabel-23'>You can check the code of my little 3D demo here: <a href="https://github.com/mibi88/3d_pyxel/">https://github.com/mibi88/3d_pyxel/</a>.</div>
 
-<div class='standard' id='magicparlabel-31'>I hope it can help you on your journey making a very basic software renderer :).</div></div>
+<div class='standard' id='magicparlabel-24'>I hope it can help you on your journey making a very basic software renderer :).</div>
+<h2 class='section_' id='magicparlabel-25'><i>Edits from the 10/11/2025</i></h2>
+<div class='standard' id='magicparlabel-26'><i>Fixed an orthography error, changed URLs to hyperlinks and added a link to the article&#8217;s new location.</i></div></div>
             </div>
         </div>
     </body>
