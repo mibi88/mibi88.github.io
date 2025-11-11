@@ -62,6 +62,36 @@ avoid_tag_replacement() {
     echo "FIXME: Fix curly brace escaping code."
 }
 
+gen_html() {
+    # Generate the HTML code.
+
+    ext=${1#*.}
+
+    case "$ext" in
+        lyx) lyx --export-to xhtml $2 $1
+             keep_styles=true ;;
+        ms) preconv $1 | eqn | tbl | refer | pic | \
+            groff -mwww -ms -Thtml > $2 ;;
+        html) cp $1 $2 ;;
+        *) echo "Unsupported file type. Skipping..."
+    esac
+}
+
+gen_pdf() {
+    # Generate the PDFs.
+
+    ext=${1#*.}
+
+    case "$ext" in
+        lyx) lyx --export-to pdf $2 $1
+             keep_styles=true ;;
+        ms) preconv $1 | eqn | tbl | refer | pic | \
+            groff -mwww -ms -Tps | ps2pdf -dPDFSETTINGS=/prepress \
+                                          -dEmbedAllFonts=true - $2 ;;
+        *) echo "PDF export not supported for this file type..."
+    esac
+}
+
 projects=$(cat $projects)
 
 echo "" > $bdir/projects.html
@@ -72,7 +102,7 @@ for i in ${projects[@]}; do
 
     mkdir -p $(dirname $bdir/$path.html)
 
-    preconv $path | groff -mwww -ms -Thtml > $bdir/$path.html
+    gen_html $path $bdir/$path.html
 
     escaped=$(escape_for_html $name)
 
@@ -121,7 +151,6 @@ for i in ${articles[@]}; do
 
     o=$bdir/${f%.*}.html
     p=$pdir/$id.pdf
-    ext=${f#*.}
 
     # Check if the ID has already been used.
 
@@ -134,27 +163,9 @@ for i in ${articles[@]}; do
 
     keep_styles=false
 
-    # Generate the HTML code.
+    gen_html $f $o
 
-    case "$ext" in
-        lyx) lyx --export-to xhtml $o $f
-             keep_styles=true ;;
-        ms) preconv $f | eqn | tbl | refer | pic | \
-            groff -mwww -ms -Thtml > $o ;;
-        html) cp $f $o ;;
-        *) echo "Unsupported file type. Skipping..."
-    esac
-
-    # Generate the PDFs.
-
-    case "$ext" in
-        lyx) lyx --export-to pdf $p $f
-             keep_styles=true ;;
-        ms) preconv $f | eqn | tbl | refer | pic | \
-            groff -mwww -ms -Tps | ps2pdf -dPDFSETTINGS=/prepress \
-                                          -dEmbedAllFonts=true - $p ;;
-        *) echo "PDF export not supported for this file type..."
-    esac
+    gen_pdf $f $p
 
     # Strip some HTML code
 
@@ -202,7 +213,7 @@ for i in ${articles[@]}; do
 done
 
 # Generate the welcome text.
-preconv welcome.ms | groff -mwww -ms -Thtml > $bdir/welcome.html
+gen_html welcome.ms $bdir/welcome.html
 
 sed -zi -e "s/.*<body[^>]*>//" -e "s/<\/body>.*//" -e "s/align=\"center\"//g" \
         -e "s/style=\"[^\"]*\"//" $bdir/welcome.html
