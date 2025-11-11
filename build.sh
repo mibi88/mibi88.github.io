@@ -17,6 +17,9 @@ mkdir -p $bdir
 IFS="
 "
 
+# USAGE: escape_for_html STRING
+#
+# Outputs the string with escape sequences on stdout.
 escape_for_html() {
     # Escape some characters for HTML
 
@@ -29,6 +32,9 @@ escape_for_html() {
     echo "$escaped"
 }
 
+# USAGE: escape_for_sed STRING
+#
+# Outputs the string with escape sequences on stdout.
 escape_for_sed() {
     # Escape some characters for sed
 
@@ -41,6 +47,9 @@ escape_for_sed() {
     echo "$escaped"
 }
 
+# USAGE: strip_styles FILE
+#
+# Remove all the styles from a html page.
 strip_styles() {
     # Strip the styles
 
@@ -48,12 +57,27 @@ strip_styles() {
     sed -i "s/style=\"[^\"]*\"//" $1
 }
 
-keep_body_only() {
-    # Remove everything except <body>'s contents.
+# USAGE: remove_html_structure FILE KEEP_STYLES
+#
+# Only keep the body and the styles if KEEP_STYLES is set to `true'
+remove_html_structure() {
+    if [ $2 = true ]; then
+        # Remove everything except <body>'s contents and the styles.
 
-    sed -zi -e "s/.*<body[^>]*>//" -e "s/<\/body>.*//" $1
+        sed -zi -e "s/.*<style[^>]*>/<style>/" \
+                -e "s/<\/style>.*<body[^>]*>/<\/style>/" \
+                -e "s/<\/body>.*//" $1
+    else
+        # Remove everything except <body>'s contents.
+
+        sed -zi -e "s/.*<body[^>]*>//" -e "s/<\/body>.*//" $1
+    fi
 }
 
+# USAGE: avoid_tag_replacement FILE
+#
+# Escape curly braces to avoid them getting replaced when generating HTML from
+# a template.
 avoid_tag_replacement() {
     # FIXME: Do not replace them in <style> tags.
 
@@ -62,6 +86,9 @@ avoid_tag_replacement() {
     echo "FIXME: Fix curly brace escaping code."
 }
 
+# USAGE: gen_html INPUT OUTPUT
+#
+# Generate HTML code from a file, such as a roff .ms file.
 gen_html() {
     # Generate the HTML code.
 
@@ -69,25 +96,31 @@ gen_html() {
 
     case "$ext" in
         lyx) lyx --export-to xhtml $2 $1
-             keep_styles=true ;;
+             echo "true"
+             exit 0 ;;
         ms) preconv $1 | eqn | tbl | refer | pic | \
             groff -mwww -ms -Thtml > $2 ;;
         html) cp $1 $2 ;;
         *) echo "Unsupported file type. Skipping..."
     esac
+
+    echo "false"
 }
 
+# USAGE: gen_pdf INPUT OUTPUT
+#
+# Generate a PDF from a file, such as a roff .ms file.
 gen_pdf() {
     # Generate the PDFs.
 
     ext=${1#*.}
 
     case "$ext" in
-        lyx) lyx --export-to pdf $2 $1
-             keep_styles=true ;;
+        lyx) lyx --export-to pdf $2 $1 ;;
         ms) preconv $1 | eqn | tbl | refer | pic | \
             groff -mwww -ms -Tps | ps2pdf -dPDFSETTINGS=/prepress \
                                           -dEmbedAllFonts=true - $2 ;;
+        html) pandoc $1 --pdf-engine pdfroff -o $2 ;;
         *) echo "PDF export not supported for this file type..."
     esac
 }
@@ -102,7 +135,7 @@ for i in ${projects[@]}; do
 
     mkdir -p $(dirname $bdir/$path.html)
 
-    gen_html $path $bdir/$path.html
+    keep_styles=$(gen_html $path $bdir/$path.html)
 
     escaped=$(escape_for_html $name)
 
@@ -114,7 +147,7 @@ for i in ${projects[@]}; do
 
     strip_styles $bdir/$path.html
 
-    keep_body_only $bdir/$path.html
+    remove_html_structure $bdir/$path.html $keep_styles
 
     # Add the title and put it into the template
 
@@ -161,13 +194,11 @@ for i in ${articles[@]}; do
 
     mkdir -p $(dirname $o)
 
-    keep_styles=false
-
-    gen_html $f $o
+    keep_styles=$(gen_html $f $o)
 
     gen_pdf $f $p
 
-    # Strip some HTML code
+    # Extract the title from the HTML code
 
     title=$(sed -z -e "s/.*<h1[^>]*>//g" -e "s/<\/h1>.*//g" $o)
 
@@ -177,13 +208,7 @@ for i in ${articles[@]}; do
 
     # Strip all the unneeded stuff
 
-    if [ $keep_styles = true ]; then
-        sed -zi -e "s/.*<style[^>]*>/<style>/" \
-                -e "s/<\/style>.*<body[^>]*>/<\/style>/" \
-                -e "s/<\/body>.*//" $o
-    else
-        keep_body_only $o
-    fi
+    remove_html_structure $o $keep_styles
 
     echo "<div class=\"article\">$(cat $o)</div>" > $o
 
@@ -213,10 +238,15 @@ for i in ${articles[@]}; do
 done
 
 # Generate the welcome text.
-gen_html welcome.ms $bdir/welcome.html
+keep_styles=$(gen_html welcome.ms $bdir/welcome.html)
 
-sed -zi -e "s/.*<body[^>]*>//" -e "s/<\/body>.*//" -e "s/align=\"center\"//g" \
-        -e "s/style=\"[^\"]*\"//" $bdir/welcome.html
+remove_html_structure $bdir/welcome.html $keep_styles
+
+strip_styles $bdir/welcome.html
+
+# Remove the align tag
+
+sed -zi "s/<h1 align=\"center\">/<h1>/g" $bdir/welcome.html
 
 # Do not generate index.html if $strip_html_structure is disabled, as it would
 # produce invalid html.
