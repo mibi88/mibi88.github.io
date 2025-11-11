@@ -43,7 +43,7 @@ code with the appropriate tool. Then I use
 a bunch to remove all the superfluous HTML that would make the generated HTML 
 invalid (when viewing the source code via Firefox, it seems to be unhappy with 
 the header and footer, but that's because my template HTML code itself is 
-incorrect \(em I'm not writing HTML very often \(em and I didn't know that
+incorrect\(emI'm not writing HTML very often\(emand I didn't know that
 .CW <header>
 and
 .CW <footer>

@@ -1,3 +1,4 @@
+good-cable-management;articles/cable_management/cable_management.ms
 static-blog;articles/static_blog/static_blog.ms
 mpy-mega2560;articles/mpy_mega/mpy_mega.lyx
 3d-python;articles/3d/3d.lyx
