@@ -2,6 +2,13 @@
 .fam N
 .NHR
 
+SomeCC
+A small toolchain with a C compiler (far from being finished, currently I'm
+coding the C preprocessor).
+
+.URL https://github.com/mibi88/ft ft
+A small utility to transfer files.
+
 .URL https://github.com/mibi88/spinnyutils spinnyutils
 Small scripts to dump CDs and DVDs.
 
