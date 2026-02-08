@@ -2,6 +2,9 @@
 .fam N
 .NHR
 
+BadCut
+A small online non-linear video editor written in JavaScript.
+
 SomeCC
 A small toolchain with a C compiler (far from being finished, currently I'm
 coding the C preprocessor).
