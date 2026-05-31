@@ -55,9 +55,15 @@ project XD.</p>
 
 
 
+<p ><a href="https://github.com/mibi88/ld59">World of Gates (Ludum Dare 59 jam)</a>
+A small game where you need to create logic gate circuits
+that perform specific tasks (play it on
+<a href="https://mibi88.itch.io/world-of-gates">itch.io</a>).</p>
+
+
 <p ><a href="https://github.com/mibi88/ld58">Garbage collector's minion (Ludum Dare 58 jam)</a>
 A small game where you are an allocator and the garbage
-collector asks you to perform some tasks.
+collector asks you to perform some tasks (play it on
 <a href="https://mibi88.itch.io/garbage-collectors-minion">itch.io</a>).</p>
 
 <p >bootris A small 510 bytes (+2
@@ -144,6 +150,19 @@ program I wrote in C (the code is awful)</p>
 <h1>Tools</h1>
 
 
+
+<p >notc A small compiler for a
+subset of ANSI C (unfinished). I just want to program a
+small somewhat portable compiler quickly before I finish
+coding SomeCC, because it will probably take me longer to
+write something more complete, while also checking that it
+follows the standard closely, as I want SomeCC to be very
+compliant with this standard.</p>
+
+
+<p ><a href="https://github.com/mibi88/ocr">ocr</a>
+A small portable OCR (unfinished) written in ANSI C, with no
+dependencies other than the C standard library.</p>
 
 <p >BadCut A small online non-linear
 video editor written in JavaScript.</p>
@@ -503,30 +522,30 @@ font-family: monospace;
 
 
 </style>
-<h1 class='title' id='magicparlabel-1'>Trying to port Micropython to Mega 2560 clones</h1>
-<div class='author' id='magicparlabel-2'><span style='font-variant:small-caps;'>Mibi88</span></div>
-<div class='date' id='magicparlabel-3'>03/10/2025</div>
-<div class='standard' id='magicparlabel-4'>I just quickly wrote this article, so it is quite messy, and my English is not so good, so&#x2026; sorry for that.</div>
+<h1 class='title' id='magicparlabel-2'>Trying to port Micropython to Mega 2560 clones</h1>
+<div class='author' id='magicparlabel-3'><span style='font-variant:small-caps;'>Mibi88</span></div>
+<div class='date' id='magicparlabel-4'>03/10/2025</div>
+<div class='standard' id='magicparlabel-5'>I just quickly wrote this article, so it is quite messy, and my English is not so good, so&#x2026; sorry for that.</div>
 
-<div class='standard' id='magicparlabel-5'>I had finished all the exercises very quickly in NSI class, so the teacher asked us, who had finished early, if we could try getting micropython working on mega 2560 clones to help him. I searched on the internet, and found that there was no port, and that it had really low specs. Later, when at home I was curious if I could make a port of micropython to it, as I knew it was easy from contributing to PythonExtra and it might be fun. I quickly set up a fedora VM to install all the AVR tools in (I don&#8217;t want to pollute my PC which such a useless toolchain as I have no such boards myself). I cloned the master branch and copy-pasted all the sample code at <span class='flex_url'>https://docs.micropython.org/en/latest/develop/porting.html</span>. It compiled and I was able to run the build/firmware.elf file in a terminal. Now I needed to get it to build for the microcontroller. I added</div>
+<div class='standard' id='magicparlabel-6'>I had finished all the exercises very quickly in NSI class, so the teacher asked us, who had finished early, if we could try getting micropython working on mega 2560 clones to help him. I searched on the internet, and found that there was no port, and that it had really low specs. Later, when at home I was curious if I could make a port of micropython to it, as I knew it was easy from contributing to PythonExtra and it might be fun. I quickly set up a fedora VM to install all the AVR tools in (I don&#8217;t want to pollute my PC which such a useless toolchain as I have no such boards myself). I cloned the master branch and copy-pasted all the sample code at <span class='flex_url'><a href='https://docs.micropython.org/en/latest/develop/porting.html'>https://docs.micropython.org/en/latest/develop/porting.html</a></span>. It compiled and I was able to run the build/firmware.elf file in a terminal. Now I needed to get it to build for the microcontroller. I added</div>
 <pre class='verbatim'>
 CROSS_COMPILE&#160;?=&#160;avr-
 </pre>
-<div class='standard' id='magicparlabel-11'>to the makefile and started fixing errors. I had to change</div>
+<div class='standard' id='magicparlabel-12'>to the makefile and started fixing errors. I had to change</div>
 <pre class='verbatim'>
 typedef&#160;intptr_t&#160;mp_int_t;&#160;//&#160;must&#160;be&#160;pointer&#160;size
 typedef&#160;uintptr_t&#160;mp_uint_t;&#160;//&#160;must&#160;be&#160;pointer&#160;size
 </pre>
-<div class='standard' id='magicparlabel-14'>to</div>
+<div class='standard' id='magicparlabel-15'>to</div>
 <pre class='verbatim'>
 typedef&#160;long&#160;long&#160;mp_int_t;&#160;//&#160;must&#160;be&#160;pointer&#160;size
 typedef&#160;unsigned&#160;long&#160;long&#160;mp_uint_t;&#160;//&#160;must&#160;be&#160;pointer&#160;size
 </pre>
-<div class='standard' id='magicparlabel-17'>in mpconfigport.h, because of a <span style='font-family:monospace;'>MP_STATIC_ASSERT</span> that checks if <span style='font-family:monospace;'>sizeof(mp_int_t) == sizeof(long long)</span>, I don&#8217;t understand why, this is incoherent with what the doc says by saying that <span style='font-family:monospace;'>mp_int_t</span> &#8220;must be pointer size&#8221;, but whatever&#x2026;</div>
+<div class='standard' id='magicparlabel-18'>in mpconfigport.h, because of a <span style='font-family:monospace;'>MP_STATIC_ASSERT</span> that checks if <span style='font-family:monospace;'>sizeof(mp_int_t) == sizeof(long long)</span>, I don&#8217;t understand why, this is incoherent with what the doc says by saying that <span style='font-family:monospace;'>mp_int_t</span> &#8220;must be pointer size&#8221;, but whatever&#x2026;</div>
 
-<div class='standard' id='magicparlabel-18'>Next I had to fix some issues with the libc and libm, as they lack some functions for some reason. It was quickly solved with some hacks.</div>
+<div class='standard' id='magicparlabel-19'>Next I had to fix some issues with the libc and libm, as they lack some functions for some reason. It was quickly solved with some hacks.</div>
 
-<div class='standard' id='magicparlabel-19'>Here are the messy things I had to do in mpconfigport.h</div>
+<div class='standard' id='magicparlabel-20'>Here are the messy things I had to do in mpconfigport.h</div>
 <pre class='verbatim'>
 //&#160;HACK:&#160;Awful&#160;hacks&#160;with&#160;the&#160;types
 typedef&#160;long&#160;long&#160;mp_int_t;&#160;//&#160;must&#160;be&#160;pointer&#160;size
@@ -558,7 +577,7 @@ float&#160;__nearbyintf(float&#160;n);
 #define&#160;FE_TOWARDZERO&#160;&#160;&#160;3
 #define&#160;FE_UPWARD&#160;&#160;&#160;&#160;&#160;&#160;&#160;4
 </pre>
-<div class='standard' id='magicparlabel-49'>And here are my messy implementations of <span style='font-family:monospace;'>__nanf</span> and <span style='font-family:monospace;'>__nearbyintf</span> that I&#8217;ve just thrown in mphalport.c</div>
+<div class='standard' id='magicparlabel-50'>And here are my messy implementations of <span style='font-family:monospace;'>__nanf</span> and <span style='font-family:monospace;'>__nearbyintf</span> that I&#8217;ve just thrown in mphalport.c</div>
 <pre class='verbatim'>
 float&#160;__nanf(const&#160;char&#160;*tagp)&#160;{
 &#160;&#160;&#160;&#160;return&#160;0;
@@ -568,21 +587,21 @@ float&#160;__nearbyintf(float&#160;n)&#160;{
 &#160;&#160;&#160;&#160;return&#160;roundf(n);&#160;//&#160;It&#160;seems&#160;like&#160;mpy&#160;only&#160;uses&#160;it&#160;for&#160;rounding
 }
 </pre>
-<div class='standard' id='magicparlabel-57'>I then added the following define to mpconfigport.h</div>
+<div class='standard' id='magicparlabel-58'>I then added the following define to mpconfigport.h</div>
 <pre class='verbatim'>
 #define&#160;MICROPY_GCREGS_SETJMP&#160;(1)
 </pre>
-<div class='standard' id='magicparlabel-59'>By the way at some point I also found <span class='flex_url'>https://micropythpn.readthedocs.io/en/docs-chap1/develop/porting.html</span> at some point which was very helpful, because it listed a lot of flags. If I&#8217;m not mistaken at this point all the C code was compiling, but not linking yet: the <span style='font-family:monospace;'>.text</span> section was overflowing. I had commented <span style='font-family:monospace;'>CROSS_COMPILE ?= avr-</span> in the Makefile and it compiled and worked on Linux, so at least my quick and dirty hacks worked.</div>
+<div class='standard' id='magicparlabel-60'>By the way at some point I also found <span class='flex_url'><a href='https://micropythpn.readthedocs.io/en/docs-chap1/develop/porting.html'>https://micropythpn.readthedocs.io/en/docs-chap1/develop/porting.html</a></span> at some point which was very helpful, because it listed a lot of flags. If I&#8217;m not mistaken at this point all the C code was compiling, but not linking yet: the <span style='font-family:monospace;'>.text</span> section was overflowing. I had commented <span style='font-family:monospace;'>CROSS_COMPILE ?= avr-</span> in the Makefile and it compiled and worked on Linux, so at least my quick and dirty hacks worked.</div>
 
-<div class='standard' id='magicparlabel-64'>So I enabled LTO with <span style='font-family:monospace;'>-flto=auto</span> and added <span style='font-family:monospace;'>-mmcu=atmega2560</span> to use the correct linker script. The <span style='font-family:monospace;'>.text</span> section was still too full.</div>
+<div class='standard' id='magicparlabel-65'>So I enabled LTO with <span style='font-family:monospace;'>-flto=auto</span> and added <span style='font-family:monospace;'>-mmcu=atmega2560</span> to use the correct linker script. The <span style='font-family:monospace;'>.text</span> section was still too full.</div>
 
-<div class='standard' id='magicparlabel-65'>I then had to stop coding, and continue the next day: today.</div>
+<div class='standard' id='magicparlabel-66'>I then had to stop coding, and continue the next day: today.</div>
 
-<div class='standard' id='magicparlabel-66'>I had some time this morning, so I tried the fix I had in mind: just adding <span style='font-family:monospace;'>-Oz</span> to the <span style='font-family:monospace;'>CFLAGS</span>. And it worked! &#x2026;but I was now facing another issue: <span style='font-family:monospace;'>.data</span> and <span style='font-family:monospace;'>.bss</span> were full. So I tried disabling more and more features, removing all the useless platform-dependant things micropython links by default for some reason, writing the <span style='font-family:monospace;'>OBJ</span> list by hand, only including what&#8217;s needed, but I didn&#8217;t got any of it working.</div>
+<div class='standard' id='magicparlabel-67'>I had some time this morning, so I tried the fix I had in mind: just adding <span style='font-family:monospace;'>-Oz</span> to the <span style='font-family:monospace;'>CFLAGS</span>. And it worked! &#x2026;but I was now facing another issue: <span style='font-family:monospace;'>.data</span> and <span style='font-family:monospace;'>.bss</span> were full. So I tried disabling more and more features, removing all the useless platform-dependant things micropython links by default for some reason, writing the <span style='font-family:monospace;'>OBJ</span> list by hand, only including what&#8217;s needed, but I didn&#8217;t got any of it working.</div>
 
-<div class='standard' id='magicparlabel-67'>So I just give up, I don&#8217;t want to spend more time on this.</div>
+<div class='standard' id='magicparlabel-68'>So I just give up, I don&#8217;t want to spend more time on this.</div>
 
-<div class='standard' id='magicparlabel-68'>I hope all what I&#8217;ve written down in this article may help someone in the future, who also tries to port it to this board. If you want the code of my port attempt, please contact me. I won&#8217;t publish it publicly as it is a mess and I&#8217;ve done a lot of copy-paste from various places.</div></div>
+<div class='standard' id='magicparlabel-69'>I hope all what I&#8217;ve written down in this article may help someone in the future, who also tries to port it to this board. If you want the code of my port attempt, please contact me. I won&#8217;t publish it publicly as it is a mess and I&#8217;ve done a lot of copy-paste from various places.</div></div>
 <div class="article"><style>
 /* Layout-provided Styles */
 div.standard {
@@ -621,20 +640,20 @@ dl.description dt { font-weight: bold; }
 
 </style>
 
-<h1 class='title' id='magicparlabel-6'>Simple 3D rendering in Python</h1>
-<div class='author' id='magicparlabel-7'><span style='font-variant:small-caps;'>Mibi88</span></div>
-<div class='date' id='magicparlabel-8'>05/05/2025 - Updated on the 10/11/2025</div>
-<div class='standard' id='magicparlabel-9'>Recently I participated at a challenge, where in an evening we had 6 hours to make a game in Python 3 with Pyxel (it sucks). I really wanted to make some 3D because it&#8217;s more impressive than a simple pixel art 2D game and I saw that Pyxel has a function to render colored triangles. It also means that I can&#8217;t have any depth buffer (and I don&#8217;t know the formula for perspective correct interpolation so I would not have been able to do 3D rendering with a depth buffer anyway). I just sorted the triangles by depth (by calculating the average of the depth of the three points, maybe there is a better way to do it, but I don&#8217;t know any) with some selection sort (maybe insertion sort may have been better, or maybe it isn&#8217;t because it doesn&#8217;t always take the same time so maybe the framerate would have been less consistent). Some formulas are also required to render 3D (I didn&#8217;t used matrices because I haven&#8217;t seen them at school yet: I&#8217;m still very young, and the little I know about them, because I use matrices in MibiEngine2 would not have been enough). So I used some formulas I found on the web a long time ago (it isn&#8217;t online anymore but it got archived by the Wayback Machine: <a href="https://web.archive.org/web/20220625104937/https://www.mfitzp.com/creating-a-3d-rotating-cube-with-micropython-and-oled-display/">https://web.archive.org/web/20220625104937/https://www.mfitzp.com/creating-a-3d-rotating-cube-with-micropython-and-oled-display/</a><i> EDIT: Actually it is still online, the URL has just changed: <a href="https://www.martinfitzpatrick.dev/creating-a-3d-rotating-cube-with-micropython-and-oled-display/">https://www.martinfitzpatrick.dev/creating-a-3d-rotating-cube-with-micropython-and-oled-display/</a></i>), but the formula for projection isn&#8217;t correct and I didn&#8217;t implemented one of the rotation formulas correctly: the rotation around the <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<h1 class='title' id='magicparlabel-7'>Simple 3D rendering in Python</h1>
+<div class='author' id='magicparlabel-8'><span style='font-variant:small-caps;'>Mibi88</span></div>
+<div class='date' id='magicparlabel-9'>05/05/2025 - Updated on the 10/11/2025</div>
+<div class='standard' id='magicparlabel-10'>Recently I participated at a challenge, where in an evening we had 6 hours to make a game in Python 3 with Pyxel (it sucks). I really wanted to make some 3D because it&#8217;s more impressive than a simple pixel art 2D game and I saw that Pyxel has a function to render colored triangles. It also means that I can&#8217;t have any depth buffer (and I don&#8217;t know the formula for perspective correct interpolation so I would not have been able to do 3D rendering with a depth buffer anyway). I just sorted the triangles by depth (by calculating the average of the depth of the three points, maybe there is a better way to do it, but I don&#8217;t know any) with some selection sort (maybe insertion sort may have been better, or maybe it isn&#8217;t because it doesn&#8217;t always take the same time so maybe the framerate would have been less consistent). Some formulas are also required to render 3D (I didn&#8217;t used matrices because I haven&#8217;t seen them at school yet: I&#8217;m still very young, and the little I know about them, because I use matrices in MibiEngine2 would not have been enough). So I used some formulas I found on the web a long time ago (it isn&#8217;t online anymore but it got archived by the Wayback Machine: <a href="https://web.archive.org/web/20220625104937/https://www.mfitzp.com/creating-a-3d-rotating-cube-with-micropython-and-oled-display/">https://web.archive.org/web/20220625104937/https://www.mfitzp.com/creating-a-3d-rotating-cube-with-micropython-and-oled-display/</a><i> EDIT: Actually it is still online, the URL has just changed: <a href="https://www.martinfitzpatrick.dev/creating-a-3d-rotating-cube-with-micropython-and-oled-display/">https://www.martinfitzpatrick.dev/creating-a-3d-rotating-cube-with-micropython-and-oled-display/</a></i>), but the formula for projection isn&#8217;t correct and I didn&#8217;t implemented one of the rotation formulas correctly: the rotation around the <math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mi>y</mi>
 </math>
  axis. I really hate AIs because they&#8217;re crawling forges so intensively and require a lot of energy, but ChatGPT was really helpful here to get the formulas I needed. I also found one of them on Wikipedia for projection. I&#8217;ll share the formulas here because I found them very hard to find, and I may not be the only one that finds them useful.</div>
-<h2 class='section_' id='magicparlabel-10'>Rotation</h2>
+<h2 class='section_' id='magicparlabel-11'>Rotation</h2>
 <dl class='description'>
 <dt class="description_label">Around&#xA0;the&#xA0;<math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mi>x</mi>
 </math>
 &#xA0;axis</dt>
-<dd class="description_item" id='magicparlabel-11'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<dd class="description_item" id='magicparlabel-12'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mrow>
  <mi>y</mi>
  <mo stretchy='false'>'</mo>
@@ -682,7 +701,7 @@ dl.description dt { font-weight: bold; }
 <mi>y</mi>
 </math>
 &#xA0;axis</dt>
-<dd class="description_item" id='magicparlabel-12'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<dd class="description_item" id='magicparlabel-13'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mrow>
  <mi>z</mi>
  <mo stretchy='false'>'</mo>
@@ -730,7 +749,7 @@ dl.description dt { font-weight: bold; }
 <mi>z</mi>
 </math>
 &#xA0;axis</dt>
-<dd class="description_item" id='magicparlabel-13'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<dd class="description_item" id='magicparlabel-14'> <math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mrow>
  <mi>x</mi>
  <mo stretchy='false'>'</mo>
@@ -775,12 +794,12 @@ dl.description dt { font-weight: bold; }
 </math>
  axis</dd>
 </dl>
-<h2 class='section_' id='magicparlabel-14'>Projection</h2>
-<div class='standard' id='magicparlabel-15'>One of the big advantages of using a projection matrix is having a near and a far plane, but I only knew a very approximate formula without it&#x2026; Today I fixed it. Here is the formula I&#8217;m using now:</div>
+<h2 class='section_' id='magicparlabel-15'>Projection</h2>
+<div class='standard' id='magicparlabel-16'>One of the big advantages of using a projection matrix is having a near and a far plane, but I only knew a very approximate formula without it&#x2026; Today I fixed it. Here is the formula I&#8217;m using now:</div>
 
-<div class='standard' id='magicparlabel-16'>First I calculate the focal length, to use the formula from Wikipedia (<a href="https://en.wikipedia.org/wiki/3D_projection#Diagram">https://en.wikipedia.org/wiki/3D_projection#Diagram</a>):</div>
+<div class='standard' id='magicparlabel-17'>First I calculate the focal length, to use the formula from Wikipedia (<a href="https://en.wikipedia.org/wiki/3D_projection#Diagram">https://en.wikipedia.org/wiki/3D_projection#Diagram</a>):</div>
 
-<div class='standard' id='magicparlabel-17'><math xmlns='http://www.w3.org/1998/Math/MathML'>
+<div class='standard' id='magicparlabel-18'><math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mrow>
  <mi>f</mi>
  <mo stretchy='false'>=</mo>
@@ -806,7 +825,7 @@ dl.description dt { font-weight: bold; }
 </math>
  the width of the viewport.</div>
 
-<div class='standard' id='magicparlabel-18'><b>Note</b>: Pyxel doesn&#8217;t provide a <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<div class='standard' id='magicparlabel-19'><b>Note</b>: Pyxel doesn&#8217;t provide a <math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mo>tan</mo>
 </math>
  function so I just used <math xmlns='http://www.w3.org/1998/Math/MathML'>
@@ -823,7 +842,7 @@ dl.description dt { font-weight: bold; }
 </math>
 .</div>
 
-<div class='standard' id='magicparlabel-19'>Then I applied Wikipedia&#8217;s formula to calculate the X and Y coordinates: <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<div class='standard' id='magicparlabel-20'>Then I applied Wikipedia&#8217;s formula to calculate the X and Y coordinates: <math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mrow>
  <mi>x</mi>
  <mo stretchy='false'>'</mo>
@@ -851,18 +870,18 @@ dl.description dt { font-weight: bold; }
 </math>
 .</div>
 
-<div class='standard' id='magicparlabel-20'><b>Note</b>: make sure that <math xmlns='http://www.w3.org/1998/Math/MathML'>
+<div class='standard' id='magicparlabel-21'><b>Note</b>: make sure that <math xmlns='http://www.w3.org/1998/Math/MathML'>
 <mi>z</mi>
 </math>
  is non-zero, or you will get a <span style='font-family:monospace;'>ZeroDivisionError</span>.</div>
-<h2 class='section_' id='magicparlabel-21'>Conclusion</h2>
-<div class='standard' id='magicparlabel-22'>All those formulas are all you should need to render very basic 3D.</div>
+<h2 class='section_' id='magicparlabel-22'>Conclusion</h2>
+<div class='standard' id='magicparlabel-23'>All those formulas are all you should need to render very basic 3D.</div>
 
-<div class='standard' id='magicparlabel-23'>You can check the code of my little 3D demo here: <a href="https://github.com/mibi88/3d_pyxel/">https://github.com/mibi88/3d_pyxel/</a>.</div>
+<div class='standard' id='magicparlabel-24'>You can check the code of my little 3D demo here: <a href="https://github.com/mibi88/3d_pyxel/">https://github.com/mibi88/3d_pyxel/</a>.</div>
 
-<div class='standard' id='magicparlabel-24'>I hope it can help you on your journey making a very basic software renderer :).</div>
-<h2 class='section_' id='magicparlabel-25'><i>Edits from the 10/11/2025</i></h2>
-<div class='standard' id='magicparlabel-26'><i>Fixed an orthography error, changed URLs to hyperlinks and added a link to the article&#8217;s new location.</i></div></div>
+<div class='standard' id='magicparlabel-25'>I hope it can help you on your journey making a very basic software renderer :).</div>
+<h2 class='section_' id='magicparlabel-26'><i>Edits from the 10/11/2025</i></h2>
+<div class='standard' id='magicparlabel-27'><i>Fixed an orthography error, changed URLs to hyperlinks and added a link to the article&#8217;s new location.</i></div></div>
             <h1>All the articles</h1>
             <a href="all/good-cable-management.html">Good cable management isn&rsquo;t optional (or is it?)</a></br><a href="all/static-blog.html">Making my website statically generated</a></br><a href="all/mpy-mega2560.html">Trying to port Micropython to Mega 2560 clones</a></br><a href="all/3d-python.html">Simple 3D rendering in Python</a></br>
         </div>

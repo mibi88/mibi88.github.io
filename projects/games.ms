@@ -2,10 +2,15 @@
 .fam N
 .NHR
 
+.URL https://github.com/mibi88/ld59 "World of Gates (Ludum Dare 59 jam)"
+A small game where you need to create logic gate circuits that perform specific 
+tasks (play it on
+.URL https://mibi88.itch.io/world-of-gates "itch.io"\&).
+
 .URL https://github.com/mibi88/ld58 \
 "Garbage collector's minion (Ludum Dare 58 jam)"
 A small game where you are an allocator and the garbage collector asks you to
-perform some tasks.
+perform some tasks (play it on
 .URL https://mibi88.itch.io/garbage-collectors-minion "itch.io"\&).
 
 bootris A small 510 bytes (+2 byte magic number to make it bootable) clone of 

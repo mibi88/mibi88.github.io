@@ -2,6 +2,17 @@
 .fam N
 .NHR
 
+notc
+A small compiler for a subset of ANSI C (unfinished). I just want to program a 
+small somewhat portable compiler quickly before I finish coding SomeCC, because 
+it will probably take me longer to write something more complete, while also
+checking that it follows the standard closely, as I want SomeCC to be very 
+compliant with this standard.
+
+.URL https://github.com/mibi88/ocr ocr
+A small portable OCR (unfinished) written in ANSI C, with no dependencies other
+than the C standard library.
+
 BadCut
 A small online non-linear video editor written in JavaScript.
 
